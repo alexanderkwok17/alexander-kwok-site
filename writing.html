@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing — Alexander Kwok</title>
+<meta name="description" content="Production ML insights, AI agent workflows, and honest takes on shipping AI at scale.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050507;--bg2:#08080C;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--teal:#0CCFBE;--teal2:#0D9488;--teal-glow:rgba(12,207,190,0.1);--white:#FAFCFF;--off:#8B9AB5;--dim:#3D4F63;--display:'Bricolage Grotesque',sans-serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+#cursor{position:fixed;width:8px;height:8px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(12,207,190,0.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94)}
+body:has(a:hover) #cursor{width:16px;height:16px}
+body:has(a:hover) #cursor-ring{width:60px;height:60px;opacity:.4}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,7,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-pip{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--off);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-links a.active{color:var(--teal)}
+.nav-btn{background:transparent!important;color:var(--teal)!important;border:1px solid rgba(12,207,190,.35)!important;padding:8px 18px!important;border-radius:100px!important;transition:all .22s!important}
+.nav-btn:hover{background:var(--teal-glow)!important;color:var(--white)!important}
+main{max-width:1100px;margin:0 auto;padding:120px 48px 100px}
+.page-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:12px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .1s}
+.page-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.page-title{font-family:var(--display);font-size:clamp(3rem,7vw,6rem);font-weight:800;letter-spacing:-.04em;line-height:.95;color:var(--white);margin-bottom:20px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .2s}
+.page-sub{font-size:18px;color:var(--off);max-width:500px;line-height:1.7;margin-bottom:80px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .35s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.filter-row{display:flex;gap:10px;margin-bottom:48px;flex-wrap:wrap;opacity:0;animation:rise .9s ease forwards .5s}
+.filter-btn{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 16px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--off);cursor:none;transition:all .2s}
+.filter-btn:hover,.filter-btn.active{border-color:rgba(12,207,190,.4);color:var(--teal);background:var(--teal-glow)}
+.posts-list{display:flex;flex-direction:column;gap:0}
+.post-row{display:grid;grid-template-columns:80px 1fr auto;gap:32px;align-items:start;padding:36px 0;border-bottom:1px solid var(--border);text-decoration:none;transition:all .2s;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease,border-color .2s}
+.post-row:first-child{border-top:1px solid var(--border)}
+.post-row.visible{opacity:1;transform:translateY(0)}
+.post-row:hover .post-title{color:var(--teal)}
+.post-row:hover .post-arrow{transform:translate(4px,-4px);color:var(--teal)}
+.post-num{font-family:var(--mono);font-size:11px;color:var(--dim);padding-top:4px}
+.post-content{}
+.post-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.post-title{font-family:var(--display);font-size:clamp(1.2rem,2.2vw,1.65rem);font-weight:700;letter-spacing:-.025em;color:var(--white);line-height:1.2;margin-bottom:10px;transition:color .2s}
+.post-excerpt{font-size:14px;color:var(--off);line-height:1.65;max-width:580px}
+.post-meta{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:14px}
+.post-arrow{font-size:20px;color:var(--dim);transition:all .25s;padding-top:4px}
+.post-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:3px 8px;border-radius:100px;display:inline-block;margin-bottom:10px}
+footer{padding:36px 48px;border-top:1px solid var(--border);margin-top:80px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.fl-left{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.fl-links{display:flex;gap:28px}
+.fl-links a{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.fl-links a:hover{color:var(--teal)}
+@media(max-width:768px){body{cursor:auto}#cursor,#cursor-ring{display:none}nav,main,footer{padding-left:20px;padding-right:20px}.nav-links{display:none}.post-row{grid-template-columns:1fr;gap:0}.post-num{display:none}.post-arrow{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-pip"></span>Alexander Kwok</a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Work</a></li>
+    <li><a href="index.html#principles">Principles</a></li>
+    <li><a href="writing.html" class="active">Writing</a></li>
+    <li><a href="index.html#toolkit">AI Toolkit</a></li>
+    <li><a href="index.html#contact" class="nav-btn">Get in touch</a></li>
+  </ul>
+</nav>
+<main>
+  <div class="page-eyebrow">Writing</div>
+  <h1 class="page-title">From the trenches,<br>not the theory.</h1>
+  <p class="page-sub">Practical insights on production ML, AI agents, and what actually works when shipping AI at scale. No sponsored content. No fluff.</p>
+  <div class="filter-row">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Production ML</button>
+    <button class="filter-btn">AI Agents</button>
+    <button class="filter-btn">Build-in-public</button>
+    <button class="filter-btn">Hot takes</button>
+  </div>
+  <div class="posts-list">
+    <a href="https://alexander-kwok.com/ai-model-20-percent-problem/" target="_blank" class="post-row">
+      <span class="post-num">01</span>
+      <div class="post-content">
+        <div class="post-tag">Production ML</div>
+        <div class="post-title">The model is 20% of the problem. Here is what kills the other 80%.</div>
+        <p class="post-excerpt">Four failure modes from 10+ years shipping ML in production — silent pipeline failures, real-time serving issues, undetected model drift, and misaligned integration. With the specific fix for each one.</p>
+        <div class="post-meta">Mar 2026 &nbsp;·&nbsp; 6 min read</div>
+      </div>
+      <span class="post-arrow">↗</span>
+    </a>
+    <a href="https://alexander-kwok.com/ai-marketing-automation-small-business/" target="_blank" class="post-row">
+      <span class="post-num">02</span>
+      <div class="post-content">
+        <div class="post-tag">AI Agents · Claude Code</div>
+        <div class="post-title">I gave my wife her Saturdays back. Here is how I built the system.</div>
+        <p class="post-excerpt">One weekend. A model-agnostic AI marketing system built with Claude Code and OpenClaw. Social media strategy, SEO rewrites, and email campaigns — automated. The architecture, the decisions, and what it revealed about the AI gap.</p>
+        <div class="post-meta">Mar 2026 &nbsp;·&nbsp; 5 min read</div>
+      </div>
+      <span class="post-arrow">↗</span>
+    </a>
+    <a href="post-linkby.html" class="post-row">
+      <span class="post-num">03</span>
+      <div class="post-content">
+        <div class="post-badge">Coming Thursday</div>
+        <div class="post-tag">Build-in-public</div>
+        <div class="post-title">9 months. A blank slate. A one-pizza team. Here is what we shipped.</div>
+        <p class="post-excerpt">The Linkby story — from zero to full production data platform with three people and AI-augmented engineering. How a one-pizza team can outship a conventional team three times its size.</p>
+        <div class="post-meta">Publishing Thursday &nbsp;·&nbsp; ~6 min read</div>
+      </div>
+      <span class="post-arrow" style="opacity:.3">↗</span>
+    </a>
+    <a href="post-agents.html" class="post-row">
+      <span class="post-num">04</span>
+      <div class="post-content">
+        <div class="post-badge">Coming Monday</div>
+        <div class="post-tag">Hot take</div>
+        <div class="post-title">Everyone is building AI agents. Most of them will not make it to production.</div>
+        <p class="post-excerpt">Where agents actually deliver versus where they fail silently — and what the teams getting real value are doing differently. From someone who has deployed them at AWS and Linkby.</p>
+        <div class="post-meta">Publishing Monday &nbsp;·&nbsp; ~5 min read</div>
+      </div>
+      <span class="post-arrow" style="opacity:.3">↗</span>
+    </a>
+  </div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div class="fl-left">© 2026 Alexander Kwok &nbsp;·&nbsp; Sydney, Australia</div>
+    <div class="fl-links">
+      <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank">LinkedIn</a>
+      <a href="https://alexander-kwok.com" target="_blank">Blog</a>
+      <a href="index.html#newsletter">Newsletter</a>
+    </div>
+  </div>
+</footer>
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+function anim(){cursor.style.left=mx+'px';cursor.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);}
+anim();
+const rows=document.querySelectorAll('.post-row');
+new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80)}});},{threshold:.1}).observe
+const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting)e.target.classList.add('visible')});},{threshold:.1});
+rows.forEach(r=>obs.observe(r));
+document.querySelectorAll('.filter-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');});});
+</script>
+</body>
+</html>

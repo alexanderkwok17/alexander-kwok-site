@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9 months. A blank slate. A one-pizza team. — Alexander Kwok</title>
+<meta name="description" content="How a one-pizza team with AI-augmented engineering outshipped a conventional team three times its size. The Linkby story.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050507;--bg2:#08080C;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--teal:#0CCFBE;--teal2:#0D9488;--teal-glow:rgba(12,207,190,0.1);--white:#FAFCFF;--off:#8B9AB5;--dim:#3D4F63;--display:'Bricolage Grotesque',sans-serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+#cursor{position:fixed;width:8px;height:8px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(12,207,190,0.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94)}
+body:has(a:hover) #cursor{width:16px;height:16px}
+body:has(a:hover) #cursor-ring{width:60px;height:60px;opacity:.4}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,7,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-pip{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--off);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-btn{background:transparent!important;color:var(--teal)!important;border:1px solid rgba(12,207,190,.35)!important;padding:8px 18px!important;border-radius:100px!important;transition:all .22s!important}
+.nav-btn:hover{background:var(--teal-glow)!important;color:var(--white)!important}
+.article-hero{padding:120px 48px 60px;max-width:800px;margin:0 auto}
+.article-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:10px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .1s}
+.article-tag::before{content:'';width:20px;height:1px;background:var(--teal)}
+.article-title{font-family:var(--display);font-size:clamp(2.4rem,5vw,4.2rem);font-weight:800;letter-spacing:-.04em;line-height:1.0;color:var(--white);margin-bottom:24px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .2s}
+.article-meta{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.06em;margin-bottom:48px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .3s}
+.article-divider{height:1px;background:var(--border);margin-bottom:60px}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.article-body{max-width:680px;margin:0 auto;padding:0 48px 100px}
+.article-body p{font-size:18px;color:var(--off);line-height:1.82;margin-bottom:1.6em;font-weight:400}
+.article-body p strong{color:var(--white);font-weight:600}
+.article-body h2{font-family:var(--display);font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em;color:var(--white);margin-top:2.5em;margin-bottom:.75em;padding-top:1em;border-top:1px solid rgba(12,207,190,.15)}
+.article-body h3{font-family:var(--display);font-size:1.25rem;font-weight:700;letter-spacing:-.025em;color:var(--white);margin-top:2em;margin-bottom:.6em}
+.article-body ul,.article-body ol{margin:0 0 1.6em 1.5em;color:var(--off)}
+.article-body li{font-size:17px;line-height:1.75;margin-bottom:.5em}
+.article-body li strong{color:var(--white);font-weight:600}
+.article-body hr{border:none;border-top:1px solid var(--border);margin:2.5em 0}
+.article-body blockquote{border-left:2px solid var(--teal);padding:16px 0 16px 24px;margin:2em 0;font-family:var(--display);font-size:1.2rem;font-weight:600;letter-spacing:-.02em;color:var(--white);line-height:1.4}
+.callout{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:20px 24px;margin:2em 0}
+.callout p{margin-bottom:0;font-size:16px}
+.back-link{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-bottom:60px;padding:10px 18px;border:1px solid rgba(12,207,190,.25);border-radius:100px;transition:all .2s}
+.back-link:hover{background:var(--teal-glow);color:var(--white)}
+.article-footer{max-width:680px;margin:0 auto;padding:0 48px 100px;border-top:1px solid var(--border);padding-top:60px}
+.author-card{display:flex;align-items:center;gap:20px;margin-bottom:40px}
+.author-img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(12,207,190,.3)}
+.author-name{font-family:var(--display);font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--white);margin-bottom:4px}
+.author-bio{font-size:13px;color:var(--off)}
+.next-posts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.next-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;text-decoration:none;transition:all .25s}
+.next-card:hover{border-color:rgba(12,207,190,.25);transform:translateY(-2px)}
+.next-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.next-title{font-family:var(--display);font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--white);line-height:1.3}
+footer{padding:36px 48px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.fl-left{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.fl-links{display:flex;gap:28px}
+.fl-links a{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.fl-links a:hover{color:var(--teal)}
+.sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.sr.visible{opacity:1;transform:translateY(0)}
+@media(max-width:768px){body{cursor:auto}#cursor,#cursor-ring{display:none}.nav-links{display:none}.article-hero,.article-body,.article-footer{padding-left:20px;padding-right:20px}.next-posts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-pip"></span>Alexander Kwok</a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Work</a></li>
+    <li><a href="index.html#principles">Principles</a></li>
+    <li><a href="writing.html">Writing</a></li>
+    <li><a href="index.html#toolkit">AI Toolkit</a></li>
+    <li><a href="index.html#contact" class="nav-btn">Get in touch</a></li>
+  </ul>
+</nav>
+
+<div class="article-hero">
+  <div class="article-tag">Build-in-public</div>
+  <h1 class="article-title">9 months ago I joined Linkby with a blank slate.</h1>
+  <div class="article-meta">Alexander Kwok &nbsp;·&nbsp; Mar 2026 &nbsp;·&nbsp; 6 min read</div>
+  <div class="article-divider"></div>
+</div>
+
+<article class="article-body">
+  <a href="writing.html" class="back-link">← All writing</a>
+
+  <p>9 months ago I joined Linkby with a blank slate.</p>
+
+  <p>The data existed — in RDS, ready to be unlocked. What was missing was a modern stack to transform it into something production ML-grade.</p>
+
+  <p>For the first three months, it was just me.</p>
+
+  <p>Here is what I shipped in that solo window:</p>
+
+  <ul>
+    <li>Full production data platform on Databricks — ingestion, behavioural event pipelines, feature store, model deployment</li>
+  </ul>
+
+  <p>Then I made my first hire — a ML Engineer. Together we pushed the stack further:</p>
+
+  <ul>
+    <li>Complete analytics stack migrated to ClickHouse</li>
+    <li>Repo-driven data pipelines in Dagster, built with AI agents accelerating development</li>
+  </ul>
+
+  <p>Six months in, a Data Scientist joined. By month nine we had shipped a personalised click pricing model live in production — touching Linkby's core revenue mechanism.</p>
+
+  <p>Three people total.</p>
+
+  <hr>
+
+  <p>Jeff Bezos famously said that if a team cannot be fed by two pizzas, it is too big. The idea is that small, autonomous teams move faster and own more.</p>
+
+  <p>Previously I worked on data projects with 5+ engineers. Solid teams, solid output, genuine complexity.</p>
+
+  <p>But here is what has changed: the tooling. AI-augmented engineering has fundamentally shifted what a one-pizza team can deliver. Every pipeline, every review, every piece of documentation moves faster because we built AI into the workflow itself. Not as a novelty. As the actual operating model.</p>
+
+  <h2>What AI-augmented engineering actually means</h2>
+
+  <p>It does not mean asking an AI to write all your code. It means building AI into the workflow at the right checkpoints so the human time goes to the decisions that require human judgement.</p>
+
+  <p>At Linkby, this looked like:</p>
+
+  <ul>
+    <li><strong>Claude Code for pipeline scaffolding.</strong> Schema definitions, transformation logic, test generation — the boilerplate that takes half a day conventionally. We handled it in an hour, then spent the rest of the day on the data model decisions that actually mattered.</li>
+    <li><strong>AI agents for Dagster pipeline development.</strong> Our ML Engineer built a system where agents write, test, and deploy pipeline components. Review time dropped significantly. Deployment confidence went up because the tests were generated alongside the code.</li>
+    <li><strong>ClickHouse migration accelerated by AI.</strong> Migrating an entire analytics stack is normally months of careful data validation. We moved faster because we used AI to generate migration scripts, validate row counts, and surface discrepancies — then focused human attention on the edge cases the scripts could not handle.</li>
+  </ul>
+
+  <h2>The thesis, nine months later</h2>
+
+  <p>My thesis going into Linkby was simple: a one-pizza team with the right AI tooling and MLOps discipline can outship a conventional team three times its size.</p>
+
+  <p>Nine months in, the data supports it.</p>
+
+  <blockquote>The constraint was never people. It was always leverage.</blockquote>
+
+  <p>If you are a founder or CTO wondering whether you can build serious AI infrastructure without a large data team — the answer is yes. But only if you are ruthless about tooling, architecture, and how the team actually works.</p>
+
+  <div class="callout">
+    <p><strong>The one thing I would do differently:</strong> Hire the ML Engineer in month one, not month three. The ClickHouse and Dagster work we built together in months four through six could have started earlier. The solo period was valuable for architecture decisions, but the team velocity unlocked by that first hire was significant.</p>
+  </div>
+
+  <p>Happy to share what the actual workflow looks like in practice. Drop a comment on <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank" style="color:var(--teal)">LinkedIn</a> or DM me directly.</p>
+</article>
+
+<div class="article-footer sr">
+  <div class="author-card">
+    <img src="https://alexander-kwok.com/content/images/2026/03/Headshot-zoom-in-wedding.jpeg" alt="Alexander Kwok" class="author-img">
+    <div>
+      <div class="author-name">Alexander Kwok</div>
+      <div class="author-bio">Head of DS & ML Engineering at Linkby · Ex-AWS L6 · WooliesX · Sydney</div>
+    </div>
+  </div>
+  <div class="next-posts">
+    <a href="https://alexander-kwok.com/ai-model-20-percent-problem/" target="_blank" class="next-card">
+      <div class="next-label">← Previous</div>
+      <div class="next-title">The model is 20% of the problem. Here is what kills the other 80%.</div>
+    </a>
+    <a href="post-agents.html" class="next-card">
+      <div class="next-label">Next →</div>
+      <div class="next-title">Everyone is building AI agents. Most will not make it to production.</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="fl-left">© 2026 Alexander Kwok &nbsp;·&nbsp; Sydney, Australia</div>
+    <div class="fl-links">
+      <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank">LinkedIn</a>
+      <a href="writing.html">Writing</a>
+      <a href="index.html#newsletter">Newsletter</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+function anim(){cursor.style.left=mx+'px';cursor.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);}
+anim();
+new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1}).observe
+const obs=new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
