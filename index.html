@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alexander Kwok — Engineering the other 80%</title>
+<meta name="description" content="Head of Data Science & ML Engineering. Building production AI/ML systems at AWS, WooliesX, and Linkby. Sydney, Australia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#050507;--bg2:#08080C;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --teal:#0CCFBE;--teal2:#0D9488;--teal-glow:rgba(12,207,190,0.1);
+  --white:#FAFCFF;--off:#8B9AB5;--dim:#3D4F63;
+  --display:'Bricolage Grotesque',sans-serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+
+/* CURSOR */
+#cursor{position:fixed;width:8px;height:8px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:screen}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(12,207,190,0.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94),opacity .3s}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:16px;height:16px}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{width:60px;height:60px;opacity:.4}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;transition:background .4s,backdrop-filter .4s}
+nav.scrolled{background:rgba(5,5,7,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-pip{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--off);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-btn{background:transparent!important;color:var(--teal)!important;border:1px solid rgba(12,207,190,.35)!important;padding:8px 18px!important;border-radius:100px!important;transition:all .22s!important;font-family:var(--mono)!important;font-size:10.5px!important;letter-spacing:.08em!important}
+.nav-btn:hover{background:var(--teal-glow)!important;color:var(--white)!important}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 48px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(12,207,190,.07) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 40% at 80% 80%,rgba(13,148,136,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at center,black 30%,transparent 70%)}
+.hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;width:100%}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:28px;display:flex;align-items:center;gap:12px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .1s}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.hero-title{font-family:var(--display);font-size:clamp(3.8rem,9vw,8.5rem);font-weight:800;letter-spacing:-.04em;line-height:.95;color:var(--white);margin-bottom:32px}
+.hero-title .line{display:block;overflow:hidden}
+.hero-title .line span{display:block;opacity:0;transform:translateY(100%);animation:lineUp .9s cubic-bezier(.16,1,.3,1) forwards}
+.hero-title .line:nth-child(1) span{animation-delay:.2s}
+.hero-title .line:nth-child(2) span{animation-delay:.35s}
+.hero-title .line:nth-child(3) span{animation-delay:.5s}
+.accent{color:transparent;background:linear-gradient(120deg,var(--teal) 0%,#5EEAD4 60%,var(--teal) 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;animation:shimmer 4s linear infinite 1.5s}
+@keyframes shimmer{to{background-position:200% center}}
+.hero-sub{font-size:18px;font-weight:400;color:var(--off);max-width:520px;line-height:1.75;margin-bottom:48px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .65s}
+.hero-sub strong{color:var(--white);font-weight:600}
+.hero-ctas{display:flex;gap:14px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .8s}
+.btn-p{font-family:var(--sans);font-size:14px;font-weight:600;background:var(--teal);color:#000;padding:14px 30px;border-radius:100px;text-decoration:none;transition:all .22s;letter-spacing:-.01em}
+.btn-p:hover{background:#5EEAD4;transform:translateY(-2px);box-shadow:0 12px 32px rgba(12,207,190,.35)}
+.btn-g{font-family:var(--sans);font-size:14px;font-weight:500;background:var(--surface);color:var(--off);padding:14px 30px;border-radius:100px;border:1px solid var(--border);text-decoration:none;transition:all .22s}
+.btn-g:hover{border-color:rgba(12,207,190,.3);color:var(--white)}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:rise 1s ease forwards 1.2s}
+.hero-scroll span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--dim),transparent);animation:scrollP 1.8s ease-in-out infinite}
+@keyframes scrollP{0%,100%{transform:scaleY(1);transform-origin:top}50%{transform:scaleY(.4);transform-origin:top}}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lineUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
+
+/* STATS */
+.stats{border-top:1px solid var(--border);padding:64px 48px}
+.stats-row{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
+.stat{padding:0 24px;border-right:1px solid var(--border);text-align:center}
+.stat:first-child{padding-left:0}
+.stat:last-child{border-right:none;padding-right:0}
+.stat-n{font-family:var(--display);font-size:clamp(1.5rem,2.2vw,2.2rem);font-weight:800;letter-spacing:-.04em;color:var(--teal);display:block;margin-bottom:6px}
+.stat-l{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);line-height:1.4}
+
+/* WORD REVEAL */
+.word-reveal-section{padding:160px 48px;border-top:1px solid var(--border)}
+.word-reveal-inner{max-width:900px;margin:0 auto}
+.wr-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:48px;display:flex;align-items:center;gap:10px}
+.wr-label::before{content:'';width:20px;height:1px;background:var(--teal)}
+.word-reveal-text{font-family:var(--display);font-size:clamp(1.9rem,3.8vw,3.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.2;color:var(--dim)}
+.word-reveal-text .w{display:inline;transition:color .35s ease,opacity .35s ease;opacity:.2}
+.word-reveal-text .w.lit{color:var(--white);opacity:1}
+
+/* PROJECTS - STICKY */
+.sticky-section{padding:0 48px;border-top:1px solid var(--border)}
+.sticky-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.sticky-left{position:sticky;top:120px;padding:120px 0}
+.sticky-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.sticky-label::before{content:'';width:20px;height:1px;background:var(--teal)}
+.sticky-title{font-family:var(--display);font-size:clamp(2.2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.04em;line-height:1.05;color:var(--white);margin-bottom:20px}
+.sticky-desc{font-size:16px;color:var(--off);font-weight:400;line-height:1.75;max-width:380px}
+.sticky-right{padding:120px 0}
+.project-block{padding:40px 0;border-bottom:1px solid var(--border);opacity:.3;transform:translateX(16px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1)}
+.project-block:first-child{padding-top:0}
+.project-block:last-child{border-bottom:none}
+.project-block.active{opacity:1;transform:translateX(0)}
+.proj-org{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.proj-org::before{content:'';width:4px;height:4px;background:var(--teal);border-radius:50%}
+.proj-title{font-family:var(--display);font-size:1.35rem;font-weight:700;letter-spacing:-.025em;color:var(--white);margin-bottom:12px;line-height:1.25}
+.proj-body{font-size:14px;color:var(--off);font-weight:400;line-height:1.7;margin-bottom:20px}
+.proj-pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:4px 10px;border-radius:100px;background:rgba(12,207,190,.06);border:1px solid rgba(12,207,190,.18);color:var(--teal)}
+
+/* PRINCIPLES */
+#principles{padding:160px 48px;border-top:1px solid var(--border)}
+.principles-inner{max-width:1100px;margin:0 auto}
+.principles-intro{font-size:17px;color:var(--off);line-height:1.75;max-width:600px;margin-top:14px}
+.principles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:64px}
+.p-card{background:var(--bg2);padding:32px 28px;position:relative;overflow:hidden;transition:background .3s;cursor:default}
+.p-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--teal-glow),transparent);opacity:0;transition:opacity .3s}
+.p-card:hover{background:rgba(10,10,16,1)}
+.p-card:hover::after{opacity:1}
+.p-card:hover .p-title{color:var(--teal)}
+.p-num{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim);margin-bottom:14px;position:relative;z-index:1}
+.p-icon{font-size:24px;margin-bottom:12px;display:block;position:relative;z-index:1}
+.p-title{font-family:var(--display);font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--white);margin-bottom:10px;line-height:1.2;transition:color .3s;position:relative;z-index:1}
+.p-body{font-size:13px;color:var(--off);line-height:1.65;font-weight:400;position:relative;z-index:1}
+
+/* WRITING */
+#writing{padding:160px 48px;border-top:1px solid var(--border)}
+.writing-inner{max-width:1100px;margin:0 auto}
+.sec-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';width:20px;height:1px;background:var(--teal)}
+.sec-title{font-family:var(--display);font-size:clamp(2.2rem,4.5vw,4rem);font-weight:800;letter-spacing:-.04em;color:var(--white);line-height:1.0}
+.sec-sub{font-size:17px;color:var(--off);font-weight:400;margin-top:14px;max-width:480px;line-height:1.7}
+.section-hdr{margin-bottom:64px}
+.writing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.writing-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;text-decoration:none;transition:all .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:200px}
+.writing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:0;transition:opacity .3s}
+.writing-card:hover{border-color:rgba(12,207,190,.25);transform:translateY(-4px);box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.writing-card:hover::before{opacity:1}
+.writing-card.featured{grid-column:span 2;flex-direction:row;align-items:center;gap:48px}
+.wc-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+.wc-title{font-family:var(--display);font-size:1.25rem;font-weight:700;letter-spacing:-.025em;color:var(--white);line-height:1.25;margin-bottom:12px;flex:1}
+.writing-card.featured .wc-title{font-size:1.7rem}
+.wc-excerpt{font-size:14px;color:var(--off);line-height:1.65;flex:1}
+.wc-meta{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:auto;padding-top:20px}
+.wc-arrow{font-size:20px;color:var(--dim);transition:all .25s;margin-left:auto;align-self:flex-start}
+.writing-card:hover .wc-arrow{transform:translate(4px,-4px);color:var(--teal)}
+.coming-soon{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:3px 8px;border-radius:100px;display:inline-block;margin-bottom:14px}
+
+/* TOOLKIT */
+#toolkit{padding:160px 48px;border-top:1px solid var(--border);background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.toolkit-inner{max-width:1100px;margin:0 auto}
+.toolkit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:64px}
+.tk-card{background:var(--bg2);padding:36px 32px;transition:background .3s;position:relative;overflow:hidden}
+.tk-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--teal-glow),transparent);opacity:0;transition:opacity .3s}
+.tk-card:hover{background:rgba(10,10,16,1)}
+.tk-card:hover::after{opacity:1}
+.tk-num{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--teal);margin-bottom:20px}
+.tk-icon{font-size:28px;margin-bottom:16px;display:block}
+.tk-title{font-family:var(--display);font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--white);margin-bottom:10px;position:relative;z-index:1}
+.tk-body{font-size:13.5px;color:var(--off);line-height:1.65;font-weight:400;position:relative;z-index:1}
+
+/* NEWSLETTER */
+#newsletter{padding:160px 48px;border-top:1px solid var(--border)}
+.nl-inner{max-width:680px;margin:0 auto;text-align:center}
+.nl-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:10px}
+.nl-eyebrow::before,.nl-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(12,207,190,.3))}
+.nl-eyebrow::after{background:linear-gradient(270deg,transparent,rgba(12,207,190,.3))}
+.nl-title{font-family:var(--display);font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.04em;color:var(--white);line-height:1.05;margin-bottom:18px}
+.nl-desc{font-size:17px;color:var(--off);line-height:1.7;margin-bottom:40px}
+.nl-form{display:flex;gap:10px;max-width:460px;margin:0 auto 14px}
+.nl-input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:14px 22px;font-family:var(--sans);font-size:14px;color:var(--white);outline:none;transition:border-color .2s}
+.nl-input::placeholder{color:var(--dim)}
+.nl-input:focus{border-color:rgba(12,207,190,.4)}
+.nl-btn{background:var(--teal);color:#000;border:none;border-radius:100px;padding:14px 26px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:none;white-space:nowrap;transition:all .22s}
+.nl-btn:hover{background:#5EEAD4;box-shadow:0 8px 28px rgba(12,207,190,.35)}
+.nl-note{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.04em}
+
+/* CONTACT */
+#contact{padding:160px 48px;border-top:1px solid var(--border)}
+.contact-inner{max-width:1100px;margin:0 auto}
+.contact-grid{display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:start}
+.contact-big{font-family:var(--display);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:800;letter-spacing:-.04em;color:var(--white);line-height:1.0;margin-bottom:20px}
+.contact-desc{font-size:17px;color:var(--off);line-height:1.75;max-width:420px;margin-bottom:40px}
+.c-row{display:flex;flex-direction:column;gap:10px}
+.c-link{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:all .22s}
+.c-link:hover{border-color:rgba(12,207,190,.3);transform:translateX(6px)}
+.c-icon{font-size:20px;flex-shrink:0}
+.c-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
+.c-val{font-size:14px;color:var(--white);font-weight:500}
+.fg{margin-bottom:18px}
+.fl{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:8px}
+.fi,.ft{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-family:var(--sans);font-size:14px;color:var(--white);outline:none;transition:border-color .2s}
+.fi::placeholder,.ft::placeholder{color:var(--dim)}
+.fi:focus,.ft:focus{border-color:rgba(12,207,190,.4)}
+.ft{height:110px;resize:vertical}
+.fsub{width:100%;background:var(--teal);color:#000;border:none;border-radius:10px;padding:14px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:none;transition:all .22s}
+.fsub:hover{background:#5EEAD4}
+
+/* FOOTER */
+footer{padding:36px 48px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.fl-left{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.fl-links{display:flex;gap:28px}
+.fl-links a{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.fl-links a:hover{color:var(--teal)}
+
+/* SCROLL REVEAL */
+.sr{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.sr.visible{opacity:1;transform:translateY(0)}
+.sr-d1{transition-delay:.1s}.sr-d2{transition-delay:.2s}.sr-d3{transition-delay:.3s}.sr-d4{transition-delay:.4s}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:2px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--teal2)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  body{cursor:auto}
+  #cursor,#cursor-ring{display:none}
+  nav,.stats,#hero,.word-reveal-section,.sticky-section,#writing,#toolkit,#newsletter,#contact,footer{padding-left:20px;padding-right:20px}
+  .nav-links{display:none}
+  .stats-row{grid-template-columns:repeat(3,1fr)}
+  .stat:nth-child(3){border-right:none}
+  .sticky-inner{grid-template-columns:1fr}
+  .sticky-left{position:relative;top:auto;padding:60px 0 0}
+  .sticky-right{padding:0 0 60px}
+  .writing-grid{grid-template-columns:1fr}
+  .writing-card.featured{grid-column:span 1;flex-direction:column;gap:0}
+  .toolkit-grid{grid-template-columns:1fr}
+  .principles-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .nl-form{flex-direction:column}
+  .footer-inner{flex-direction:column;gap:16px}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo"><span class="nav-pip"></span>Alexander Kwok</a>
+  <ul class="nav-links">
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#principles">Principles</a></li>
+    <li><a href="#writing">Writing</a></li>
+    <li><a href="#toolkit">AI Toolkit</a></li>
+    <li><a href="#contact" class="nav-btn">Get in touch</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Sydney, Australia &nbsp;·&nbsp; Head of DS &amp; ML Engineering</div>
+    <h1 class="hero-title">
+      <span class="line"><span>Engineering</span></span>
+      <span class="line"><span>the other</span></span>
+      <span class="line"><span class="accent">80%.</span></span>
+    </h1>
+    <p class="hero-sub">I build <strong>AI/ML systems that actually ship</strong> — from data infrastructure to production models. Ex-AWS L6 · WooliesX · Currently at Linkby.</p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-p">View my work</a>
+      <a href="#writing" class="btn-g">Read my writing</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- STATS -->
+<div class="stats sr">
+  <div class="stats-row">
+    <div class="stat"><span class="stat-n">10+</span><span class="stat-l">Years production ML</span></div>
+    <div class="stat"><span class="stat-n">AWS L6</span><span class="stat-l">Data Science Manager</span></div>
+    <div class="stat"><span class="stat-n">10 PB+</span><span class="stat-l">Daily data processed</span></div>
+    <div class="stat"><span class="stat-n">10x</span><span class="stat-l">Productivity via LLM Ops</span></div>
+    <div class="stat"><span class="stat-n">21</span><span class="stat-l">Engineers led</span></div>
+    <div class="stat"><span class="stat-n">1</span><span class="stat-l">Patent — ML algorithm</span></div>
+  </div>
+</div>
+
+<!-- WORD REVEAL -->
+<div class="word-reveal-section">
+  <div class="word-reveal-inner">
+    <div class="wr-label">About me</div>
+    <p class="word-reveal-text" id="wordReveal">Most AI projects fail not because the model was wrong — but because nobody solved the pipeline, the infrastructure, and the deployment. I have spent a decade building the 80% that everyone ignores. At AWS processing ten petabytes daily. At WooliesX serving millions of customers. At Linkby proving a one-pizza team can outship a conventional team three times its size.</p>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sticky-section">
+    <div class="sticky-inner">
+      <div class="sticky-left">
+        <div class="sticky-label">Selected Work</div>
+        <h2 class="sticky-title">Production systems.<br>Not prototypes.</h2>
+        <p class="sticky-desc">What I have built across enterprise ML, data platforms, and AI consulting engagements.</p>
+      </div>
+      <div class="sticky-right">
+        <div class="project-block">
+          <div class="proj-org">Linkby &nbsp;·&nbsp; 2025–Present</div>
+          <h3 class="proj-title">Zero to production data platform in 9 months</h3>
+          <p class="proj-body">Started alone. Built Linkby's entire data infrastructure from scratch — Databricks platform, ClickHouse analytics migration, AI-agent-driven Dagster pipelines. Hired an ML Engineer, then a Data Scientist. Shipped a personalised click pricing model live in production. Three people delivering at 10x the velocity of a conventional team.</p>
+          <div class="proj-pills"><span class="pill">Databricks</span><span class="pill">ClickHouse</span><span class="pill">Dagster</span><span class="pill">LightGBM</span><span class="pill">AI Agents</span></div>
+        </div>
+        <div class="project-block">
+          <div class="proj-org">Amazon Web Services &nbsp;·&nbsp; 2022–2025</div>
+          <h3 class="proj-title">LLM Ops automation at petabyte scale</h3>
+          <p class="proj-body">Led a team of 10 building data-centric network availability strategies processing 10+ PB daily. Implemented LLM Ops automation that eliminated 100+ manual engineering processes at 10x productivity. Contributed to a patent for a novel ML algorithm for complex network applications.</p>
+          <div class="proj-pills"><span class="pill">LLM Ops</span><span class="pill">SageMaker</span><span class="pill">AWS</span><span class="pill">10 PB+ daily</span></div>
+        </div>
+        <div class="project-block">
+          <div class="proj-org">WooliesX &nbsp;·&nbsp; 2018–2022</div>
+          <h3 class="proj-title">Recommendation engines for millions of customers</h3>
+          <p class="proj-body">Led a team of 21 delivering personalised recommendation engines across Web, App, and Email for millions of Woolworths customers. Built graph neural network and ALS-based systems with real-time feature engineering at national retail scale.</p>
+          <div class="proj-pills"><span class="pill">GNN</span><span class="pill">ALS</span><span class="pill">Real-time serving</span><span class="pill">GCP</span><span class="pill">Kubernetes</span></div>
+        </div>
+        <div class="project-block">
+          <div class="proj-org">Consulting &nbsp;·&nbsp; AI Sales Intelligence</div>
+          <h3 class="proj-title">LangChain sales automation platform</h3>
+          <p class="proj-body">Architected a pipeline converting sales audio into structured deal documents and closing workflows. Built network analysis to map client org structures — identifying champions versus blockers. Deployed a Slack RAG agent letting the sales team query deal context in natural language.</p>
+          <div class="proj-pills"><span class="pill">LangChain</span><span class="pill">RAG</span><span class="pill">Network analysis</span><span class="pill">Slack AI</span></div>
+        </div>
+        <div class="project-block">
+          <div class="proj-org">Consulting &nbsp;·&nbsp; Clinical AI Indonesia</div>
+          <h3 class="proj-title">Clinical transcription for Indonesian hospitals</h3>
+          <p class="proj-body">Technical lead for a production clinical transcription system. Fine-tuned Whisper on Bahasa Indonesia and English medical audio for code-switching. Designed a PDP Law-compliant data architecture for hospital partnership deployments.</p>
+          <div class="proj-pills"><span class="pill">Whisper fine-tuning</span><span class="pill">PDP Law</span><span class="pill">SageMaker</span><span class="pill">Jakarta region</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP PRINCIPLES -->
+<section id="principles">
+  <div class="principles-inner">
+    <div class="section-hdr sr">
+      <div class="sec-label">How I operate</div>
+      <h2 class="sec-title">Guiding principles.</h2>
+      <p class="principles-intro">The Amazon Leadership Principles shaped how I think, build, and lead. After years at AWS and beyond, these are not just values I aspire to — they are the operating system I actually run on.</p>
+    </div>
+    <div class="principles-grid sr">
+
+      <div class="p-card">
+        <div class="p-num">01</div>
+        <span class="p-icon">🎯</span>
+        <div class="p-title">Customer Obsession</div>
+        <p class="p-body">Every system I build starts with who uses it and what they actually need — not what is technically elegant. At WooliesX that was millions of Woolworths customers. At Linkby it is advertisers and publishers. The model serves the customer, not the other way around.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">02</div>
+        <span class="p-icon">🏗️</span>
+        <div class="p-title">Ownership</div>
+        <p class="p-body">I do not hand off problems. When I joined Linkby alone with a blank slate, I owned the full stack — data engineering, ML, infrastructure, and delivery. No team to blame, no pipeline to wait on. Ownership means acting like it is your company even when it is not.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">03</div>
+        <span class="p-icon">💡</span>
+        <div class="p-title">Invent and Simplify</div>
+        <p class="p-body">The best solutions I have built are the ones that removed complexity rather than added it. AI-agent-driven pipeline automation at Linkby. A model-agnostic architecture that lets you swap the underlying model with one config change. Simplicity is the hardest thing to engineer.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">04</div>
+        <span class="p-icon">🔭</span>
+        <div class="p-title">Think Big</div>
+        <p class="p-body">My thesis at Linkby was that a one-pizza team with the right AI tooling can outship a conventional team three times its size. Most people thought it was ambitious. Nine months later, the data supports it. Thinking big means setting targets that require you to change how you work, not just how hard.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">05</div>
+        <span class="p-icon">⚡</span>
+        <div class="p-title">Bias for Action</div>
+        <p class="p-body">Speed matters in ML. A good model shipped in six weeks beats a perfect model shipped never. I build iteratively — get something to production, measure it, improve it. The teams I have seen fail spent months perfecting a model that never left a notebook. Move first, refine continuously.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">06</div>
+        <span class="p-icon">🔍</span>
+        <div class="p-title">Dive Deep</div>
+        <p class="p-body">I do not delegate understanding. When ClickHouse replication slots caused WAL storage to compound at Linkby, I went all the way down to the PostgreSQL internals to diagnose it. When a model drifts, I do not just retrain — I understand why the data distribution shifted. Leaders who do not dive deep make bad calls.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">07</div>
+        <span class="p-icon">📈</span>
+        <div class="p-title">Deliver Results</div>
+        <p class="p-body">The only thing that matters at the end of a project is whether it shipped and whether it worked. 30% uplift in customer CTR at Linkby. 10x productivity gains at AWS. A clinical transcription system live in Indonesian hospitals. Results are not slides. They are systems running in production.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">08</div>
+        <span class="p-icon">🔬</span>
+        <div class="p-title">Learn and Be Curious</div>
+        <p class="p-body">I got a ClickHouse certification in December 2025 while running a full production migration. I fine-tuned Whisper on Indonesian medical audio because nobody else had solved that specific problem. Curiosity is what keeps my technical instincts sharp when the field moves as fast as AI does right now.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">09</div>
+        <span class="p-icon">🏆</span>
+        <div class="p-title">Insist on Highest Standards</div>
+        <p class="p-body">I will not ship a model without monitoring. I will not deploy a pipeline without alerting. I have seen what happens when teams lower the bar on production standards — silent failures that erode stakeholder trust for months. High standards are not perfectionism. They are the minimum viable reliability.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">10</div>
+        <span class="p-icon">🤝</span>
+        <div class="p-title">Earn Trust</div>
+        <p class="p-body">I write about what actually breaks in production, not just what works. I flag problems to stakeholders before they become incidents. At AWS I was the person teams came to when something critical needed an honest assessment. Trust is built through consistency and transparency, not polish.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">11</div>
+        <span class="p-icon">🌱</span>
+        <div class="p-title">Hire and Develop the Best</div>
+        <p class="p-body">I have led teams of up to 21. The best hires I made were people who challenged my thinking within their first month. At Linkby, I hired an ML Engineer who took ClickHouse and Dagster further than I had planned. Developing people means giving them hard problems, not easy wins.</p>
+      </div>
+
+      <div class="p-card">
+        <div class="p-num">12</div>
+        <span class="p-icon">🦴</span>
+        <div class="p-title">Have Backbone; Disagree and Commit</div>
+        <p class="p-body">I have pushed back on architectural decisions that would have created technical debt. I have argued against deploying models that were not ready for production. But once the decision is made, I commit fully. The worst outcome is half-hearted execution on a decision you disagree with but never challenged.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WRITING -->
+<section id="writing">
+  <div class="writing-inner">
+    <div class="section-hdr sr">
+      <div class="sec-label">Writing</div>
+      <h2 class="sec-title">From the trenches,<br>not the theory.</h2>
+      <p class="sec-sub">Practical insights on production ML, AI agents, and what actually works when shipping AI at scale.</p>
+    </div>
+    <div class="writing-grid">
+      <a href="https://alexander-kwok.com/ai-model-20-percent-problem/" target="_blank" class="writing-card featured sr">
+        <div style="flex:1">
+          <div class="wc-tag">Production ML &nbsp;·&nbsp; Featured</div>
+          <div class="wc-title">The model is 20% of the problem. Here is what kills the other 80%.</div>
+          <div class="wc-excerpt">Four failure modes from 10+ years shipping ML in production — silent pipeline failures, real-time serving issues, undetected model drift, and misaligned integration. With the fix for each.</div>
+          <div class="wc-meta">Mar 2026 &nbsp;·&nbsp; 6 min read</div>
+        </div>
+        <span class="wc-arrow">↗</span>
+      </a>
+      <a href="https://alexander-kwok.com/ai-marketing-automation-small-business/" target="_blank" class="writing-card sr sr-d1">
+        <div class="wc-tag">AI Agents &nbsp;·&nbsp; Claude Code</div>
+        <div class="wc-title">I gave my wife her Saturdays back. Here is how I built the system.</div>
+        <div class="wc-excerpt">One weekend. One model-agnostic AI marketing system. Social media, SEO, email — automated.</div>
+        <div class="wc-meta">Mar 2026 &nbsp;·&nbsp; 5 min read</div>
+        <span class="wc-arrow">↗</span>
+      </a>
+      <a href="https://alexander-kwok.com" target="_blank" class="writing-card sr sr-d2">
+        <div class="coming-soon">Coming Thursday</div>
+        <div class="wc-tag">Build-in-public</div>
+        <div class="wc-title">9 months. A blank slate. A one-pizza team. Here is what we shipped.</div>
+        <div class="wc-meta">Publishing Thursday</div>
+        <span class="wc-arrow" style="opacity:.25">↗</span>
+      </a>
+      <a href="https://alexander-kwok.com" target="_blank" class="writing-card sr sr-d3">
+        <div class="coming-soon">Coming Monday</div>
+        <div class="wc-tag">Hot take</div>
+        <div class="wc-title">Everyone is building AI agents. Most will not make it to production.</div>
+        <div class="wc-meta">Publishing Monday</div>
+        <span class="wc-arrow" style="opacity:.25">↗</span>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:40px" class="sr">
+      <a href="https://alexander-kwok.com" target="_blank" class="btn-g">Read all articles →</a>
+    </div>
+  </div>
+</section>
+
+<!-- AI TOOLKIT -->
+<section id="toolkit">
+  <div class="toolkit-inner">
+    <div class="section-hdr sr">
+      <div class="sec-label">AI Toolkit</div>
+      <h2 class="sec-title">How I use AI<br>in my own work.</h2>
+      <p class="sec-sub">I do not just build AI systems for clients — I run my own workflows on Claude Code and AI agents every day.</p>
+    </div>
+    <div class="toolkit-grid sr">
+      <div class="tk-card"><div class="tk-num">01</div><span class="tk-icon">⌨️</span><div class="tk-title">Claude Code as pair programmer</div><p class="tk-body">My primary environment for building data pipelines and prototyping ML systems. The key is deep contextualisation — a well-briefed session moves faster than working alone and catches things I would miss.</p></div>
+      <div class="tk-card"><div class="tk-num">02</div><span class="tk-icon">🤖</span><div class="tk-title">AI agent-driven pipelines</div><p class="tk-body">At Linkby, built Dagster pipelines where AI agents write, test, and deploy transformations. Agents handle boilerplate. I focus on data model decisions and business logic that requires domain knowledge.</p></div>
+      <div class="tk-card"><div class="tk-num">03</div><span class="tk-icon">⚡</span><div class="tk-title">Model-agnostic architecture</div><p class="tk-body">Every system I build decouples the interface from the model. Route repetitive tasks to cost-efficient models (Qwen). Route complex tasks to stronger ones. Swapping models should require changing one config line.</p></div>
+      <div class="tk-card"><div class="tk-num">04</div><span class="tk-icon">📐</span><div class="tk-title">Production principles</div><p class="tk-body">Define the task precisely before building the agent. Build model-agnostic from day one. Put humans at the right checkpoints. Cost-profile every workflow. Log everything — agents fail in unexpected ways without visibility.</p></div>
+      <div class="tk-card"><div class="tk-num">05</div><span class="tk-icon">🔍</span><div class="tk-title">RAG and sales intelligence</div><p class="tk-body">Built Slack AI agents with RAG on sales transcripts — teams query deal context in natural language, surface relationship intelligence via network analysis on client org structures.</p></div>
+      <div class="tk-card"><div class="tk-num">06</div><span class="tk-icon">🧬</span><div class="tk-title">LLM fine-tuning in production</div><p class="tk-body">Fine-tuned Whisper for Bahasa Indonesia medical audio with English code-switching. Exploring domain-specific fine-tuning of smaller models where large general models are overkill.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+  <div class="nl-inner sr">
+    <div class="nl-eyebrow">Newsletter</div>
+    <h2 class="nl-title">Insights without<br>the hype.</h2>
+    <p class="nl-desc">Production ML tips, AI agent workflows, and honest takes on what actually works — directly to your inbox. No noise, no sponsored content.</p>
+    <form class="nl-form" action="https://alexander-kwok.com/#/portal/signup" target="_blank">
+      <input type="email" class="nl-input" placeholder="your@email.com">
+      <button type="submit" class="nl-btn">Subscribe</button>
+    </form>
+    <p class="nl-note">No spam. Unsubscribe any time.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-grid">
+      <div class="sr">
+        <div class="sec-label">Contact</div>
+        <h2 class="contact-big">Let's build<br>something serious.</h2>
+        <p class="contact-desc">Available for consulting engagements in production ML, data platform architecture, and AI systems. Not pilots or strategy decks — systems that actually ship.</p>
+        <div class="c-row">
+          <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank" class="c-link">
+            <span class="c-icon">💼</span>
+            <div><div class="c-lbl">LinkedIn</div><div class="c-val">linkedin.com/in/alexander-k-ds</div></div>
+          </a>
+          <a href="https://alexander-kwok.com" target="_blank" class="c-link">
+            <span class="c-icon">✍️</span>
+            <div><div class="c-lbl">Writing</div><div class="c-val">alexander-kwok.com</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="sr sr-d2">
+        <form onsubmit="handleForm(event)">
+          <div class="fg"><label class="fl">Name</label><input class="fi" type="text" placeholder="Your name"></div>
+          <div class="fg"><label class="fl">Email</label><input class="fi" type="email" placeholder="your@email.com"></div>
+          <div class="fg"><label class="fl">What are you building?</label><textarea class="ft" placeholder="Tell me about your AI or data challenge..."></textarea></div>
+          <button type="submit" class="fsub" id="formBtn">Send message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="fl-left">© 2026 Alexander Kwok &nbsp;·&nbsp; Sydney, Australia</div>
+    <div class="fl-links">
+      <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank">LinkedIn</a>
+      <a href="https://alexander-kwok.com" target="_blank">Blog</a>
+      <a href="#newsletter">Newsletter</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+function animCursor(){
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// NAV
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+
+// SCROLL REVEAL
+const srEls=document.querySelectorAll('.sr');
+new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
+},{threshold:.12,rootMargin:'0px 0px -60px 0px'}).observe
+// use forEach instead
+const revealObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
+},{threshold:.1,rootMargin:'0px 0px -60px 0px'});
+srEls.forEach(el=>revealObs.observe(el));
+
+// WORD REVEAL
+const wr=document.getElementById('wordReveal');
+if(wr){
+  const words=wr.textContent.trim().split(/\s+/);
+  wr.innerHTML=words.map(w=>`<span class="w">${w} </span>`).join('');
+  const wSpans=wr.querySelectorAll('.w');
+  window.addEventListener('scroll',()=>{
+    const rect=wr.getBoundingClientRect();
+    const progress=Math.max(0,Math.min(1,(window.innerHeight-rect.top)/(window.innerHeight*.7)));
+    const lit=Math.floor(progress*wSpans.length);
+    wSpans.forEach((w,i)=>w.classList.toggle('lit',i<lit));
+  },{passive:true});
+}
+
+// STICKY PROJECT ACTIVATION
+const projBlocks=document.querySelectorAll('.project-block');
+new IntersectionObserver((entries)=>{
+  entries.forEach(e=>e.target.classList.toggle('active',e.isIntersecting));
+},{threshold:.5,rootMargin:'-15% 0px -15% 0px'}).observe
+const projObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>e.target.classList.toggle('active',e.isIntersecting));
+},{threshold:.4,rootMargin:'-10% 0px -10% 0px'});
+projBlocks.forEach(b=>projObs.observe(b));
+
+// FORM
+function handleForm(e){
+  e.preventDefault();
+  const btn=document.getElementById('formBtn');
+  btn.textContent='Message sent ✓';
+  btn.style.background='#0F766E';btn.style.color='#fff';
+  setTimeout(()=>{btn.textContent='Send message';btn.style.background='';btn.style.color='';},3000);
+}
+</script>
+</body>
+</html>
