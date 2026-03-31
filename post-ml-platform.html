@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selecting an Effective & Productive Machine Learning Platform — Alexander Kwok</title>
+<meta name="description" content="Three key factors for choosing an ML platform: cloud portability, simplicity of tooling, and notebook collaboration. Lessons from leading ML teams across industries.">
+<meta property="og:title" content="Selecting an Effective & Productive Machine Learning Platform">
+<meta property="og:description" content="Three key factors for choosing an ML platform: cloud portability, simplicity of tooling, and notebook collaboration.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://alexander-kwok.com/post-ml-platform.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Selecting an Effective & Productive Machine Learning Platform">
+<meta name="twitter:description" content="Three key factors for choosing an ML platform from leading ML teams across industries.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050507;--bg2:#08080C;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--teal:#0CCFBE;--teal2:#0D9488;--teal-glow:rgba(12,207,190,0.1);--white:#FAFCFF;--off:#8B9AB5;--dim:#3D4F63;--display:'Bricolage Grotesque',sans-serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+#cursor{position:fixed;width:8px;height:8px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(12,207,190,0.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94)}
+body:has(a:hover) #cursor{width:16px;height:16px}
+body:has(a:hover) #cursor-ring{width:60px;height:60px;opacity:.4}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,7,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-pip{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--off);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-btn{background:transparent!important;color:var(--teal)!important;border:1px solid rgba(12,207,190,.35)!important;padding:8px 18px!important;border-radius:100px!important;transition:all .22s!important}
+.nav-btn:hover{background:var(--teal-glow)!important;color:var(--white)!important}
+.article-hero{padding:120px 48px 60px;max-width:800px;margin:0 auto}
+.article-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:10px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .1s}
+.article-tag::before{content:'';width:20px;height:1px;background:var(--teal)}
+.article-title{font-family:var(--display);font-size:clamp(2.4rem,5vw,4.2rem);font-weight:800;letter-spacing:-.04em;line-height:1.0;color:var(--white);margin-bottom:24px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .2s}
+.article-meta{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.06em;margin-bottom:48px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .3s}
+.article-divider{height:1px;background:var(--border);margin-bottom:60px}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.article-body{max-width:680px;margin:0 auto;padding:0 48px 100px}
+.article-body p{font-size:18px;color:var(--off);line-height:1.82;margin-bottom:1.6em;font-weight:400}
+.article-body p strong{color:var(--white);font-weight:600}
+.article-body h2{font-family:var(--display);font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em;color:var(--white);margin-top:2.5em;margin-bottom:.75em;padding-top:1em;border-top:1px solid rgba(12,207,190,.15)}
+.article-body h3{font-family:var(--display);font-size:1.25rem;font-weight:700;letter-spacing:-.025em;color:var(--white);margin-top:2em;margin-bottom:.6em}
+.article-body ul,.article-body ol{margin:0 0 1.6em 1.5em;color:var(--off)}
+.article-body li{font-size:17px;line-height:1.75;margin-bottom:.5em}
+.article-body li strong{color:var(--white);font-weight:600}
+.article-body hr{border:none;border-top:1px solid var(--border);margin:2.5em 0}
+.article-body blockquote{border-left:2px solid var(--teal);padding:16px 0 16px 24px;margin:2em 0;font-family:var(--display);font-size:1.2rem;font-weight:600;letter-spacing:-.02em;color:var(--white);line-height:1.4}
+.callout{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:20px 24px;margin:2em 0}
+.callout p{margin-bottom:0;font-size:16px}
+.back-link{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-bottom:60px;padding:10px 18px;border:1px solid rgba(12,207,190,.25);border-radius:100px;transition:all .2s}
+.back-link:hover{background:var(--teal-glow);color:var(--white)}
+.article-footer{max-width:680px;margin:0 auto;padding:0 48px 100px;border-top:1px solid var(--border);padding-top:60px}
+.author-card{display:flex;align-items:center;gap:20px;margin-bottom:40px}
+.author-img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(12,207,190,.3)}
+.author-name{font-family:var(--display);font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--white);margin-bottom:4px}
+.author-bio{font-size:13px;color:var(--off)}
+.next-posts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.next-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;text-decoration:none;transition:all .25s}
+.next-card:hover{border-color:rgba(12,207,190,.25);transform:translateY(-2px)}
+.next-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.next-title{font-family:var(--display);font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--white);line-height:1.3}
+footer{padding:36px 48px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.fl-left{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.fl-links{display:flex;gap:28px}
+.fl-links a{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.fl-links a:hover{color:var(--teal)}
+.sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.sr.visible{opacity:1;transform:translateY(0)}
+.hero-img-container{max-width:800px;margin:0 auto;padding:0 48px}
+.hero-img-container img{width:100%;border-radius:12px;margin-bottom:60px;border:1px solid rgba(255,255,255,0.08)}
+@media(max-width:768px){body{cursor:auto}#cursor,#cursor-ring{display:none}.nav-links{display:none}.article-hero,.article-body,.article-footer{padding-left:20px;padding-right:20px}.hero-img-container{padding:0 20px}.next-posts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-pip"></span>Alexander Kwok</a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Work</a></li>
+    <li><a href="index.html#principles">Principles</a></li>
+    <li><a href="writing.html">Writing</a></li>
+    <li><a href="index.html#toolkit">AI Toolkit</a></li>
+    <li><a href="index.html#contact" class="nav-btn">Get in touch</a></li>
+  </ul>
+</nav>
+
+<div class="article-hero">
+  <div class="article-tag">MLOps &nbsp;·&nbsp; Platform Engineering</div>
+  <h1 class="article-title">Selecting an Effective & Productive Machine Learning Platform</h1>
+  <div class="article-meta">Alexander Kwok &nbsp;·&nbsp; Mar 2026 &nbsp;·&nbsp; 8 min read</div>
+  <div class="article-divider"></div>
+</div>
+
+<div class="hero-img-container">
+  <img src="Selecting%20an%20Effective%20%26%20Productive%20Machine%20Learning%20Platform.webp" alt="Selecting an Effective & Productive Machine Learning Platform" style="width:100%;border-radius:12px;margin-bottom:60px;border:1px solid rgba(255,255,255,0.08)">
+</div>
+
+<article class="article-body">
+  <a href="writing.html" class="back-link">← All writing</a>
+
+  <p>As you embark on building or enhancing your organization's ML capabilities, the choice you make for your ML Platform is crucial. Setting up a machine learning platform is a very complicated exercise, as each company or team you are in could be of different sizes and varying functions.</p>
+
+  <p>In my years of experience leading ML teams at different companies, I had to go through this exercise many times. I believe there are valuable learnings that someone who is in the process of setting up or evaluating how to improve their current situation can benefit from.</p>
+
+  <p>I am fortunate to have seen and shape ML practices across a variety of industries, team compositions, and technologies. I have worked across industries ranging from retail to digital media. I've worked with data science (DS) and machine learning engineering (MLE) teams of various shapes and sizes; in some cases taking a small team and rapidly scaling them up to over 80 data scientists. I've worked with ML & AI technologies across the Azure, Google Cloud, and Amazon Web Services landscapes.</p>
+
+  <p>Throughout all these experiences, I have gone over a number of considerations when it comes to selecting an ML platform. The major consideration has always been finding a solution that can accompany the company's ever-changing Data Science and ML initiatives, and allow team members to execute at a rapid pace. I have seen challenges arise from multiple fronts and there are a number of learnings that I would like to share.</p>
+
+  <p>I see 3 key factors that shape a solid foundation for an ML platform:</p>
+
+  <ol>
+    <li>Cloud & Platform Portability</li>
+    <li>Simplicity of Data Science tooling</li>
+    <li>Notebook & Collaboration experience</li>
+  </ol>
+
+  <hr>
+
+  <h2>1st Consideration: Cloud Platform Environment vs Platform Portability</h2>
+
+  <p>Data Scientists and Machine Learning Engineers require convenient and secure access to data. The organization will usually have a primary cloud that holds its data assets, often in a data lake or data warehouse. In order to allow the DS & MLE teams to start being productive immediately, the decision is often to utilize that cloud platform's native ML & AI tooling. However, these usually come with restrictions (e.g. lack of portability across environments, custom DSLs, etc.) that are not future-proof and will easily mis-align with where the data sits in the company.</p>
+
+  <h3>Multi-cloud usage could disrupt lots of efficiencies across teams</h3>
+
+  <p>One company I've worked at has the perfect example for this scenario. A bulk of the data was stored in AWS, hence most workloads were set up to execute on AWS EC2 instances. We spent considerable time setting up lots of infrastructure within the AWS environment. One year down the track, the technology team decided to move all the data assets to Google Cloud. Not only did it disrupt our rhythm, but it also incurred huge time & resource costs in retooling workflows across environments.</p>
+
+  <p>However, this could have been avoided if we chose a cloud-agnostic offering, such as Databricks. A cloud-agnostic offering allows us to develop machine learning activities & workflows independently, with the assurance that they will operate uniformly across clouds. This future-proofs our work, and allows our organizations to adopt multi-cloud architectures and/or move data architectures across clouds.</p>
+
+  <h2>2nd Consideration: Simplicity of Data Science Tooling</h2>
+
+  <p>A normal workflow for data scientists usually includes exploratory data analysis (EDA), manipulating datasets into different forms, feature engineering, creating training datasets, performing multiple sampling strategies, building models then exploring multiple models to compare against their performance, and finally picking the best model to go into production, and provide performance reporting for business stakeholders. That's a lot of tasks with different tools and languages involved. While working with a team of data scientists, you will also face people with different preferences on tool sets, some prefer Python or R, while others may be more comfortable with Scala or Java.</p>
+
+  <p>You usually end up with a few decisions that you have to make to simplify this technology landscape:</p>
+
+  <ol>
+    <li>Build and maintain a common tooling function, such that it can be reusable so that not everyone in the team is duplicating tasks</li>
+    <li>Build in an environment that is language agnostic, such that common tooling functions can be shared and reused easily</li>
+  </ol>
+
+  <p>At one of my previous companies, we decided to build our own Automated Machine Learning (AutoML) platform. This was a platform made available to all our data scientists, and they could also improve the underlying algorithms.</p>
+
+  <p>We built this on Argo. It was widely adopted, with almost 100s of models being trained concurrently, and minimal bottlenecks thanks to Kubernetes auto-scaling. However, this setup is quite time- and resource-intensive, especially with the ever-changing metrics and model type of each new development. It required valuable MLE time to maintain many working parts. Hence, in later stages, we started looking for a platform that increased productivity; and decided to evaluate Databricks and Vertex AI.</p>
+
+  <p>We were already using open-source MLflow to capture model experimentation metrics. Databricks has very strong integration with MLflow, while Vertex AI requires lots of extra custom logging in order to provide the visibility that MLflow and Databricks can provide. That itself will save you lots of effort. I recently helped a startup set up their ML Platform from scratch with MLflow on Databricks; something that took hours rather than months.</p>
+
+  <h3>Model deployment and diagnosis</h3>
+
+  <p>Our ML Platform should allow us to deploy models to production and warn us when the model's performance starts to deteriorate. This means that the ease of deployment and diagnosis is very important.</p>
+
+  <p>A few things I have experienced in this area:</p>
+
+  <ul>
+    <li>Model deployment in containers requires extra setup to host and serve models and would need to set up extra logging facilities to capture results</li>
+    <li>In more immature teams, models are deployed as pickle files and executed separately. Results are then captured retrospectively or only model results are saved, hence creating confusion when diagnosing results.</li>
+  </ul>
+
+  <p>Based on these points, it is very important to simplify the deployment workflow and minimize the variation between different team members' work. After comparing against lots of existing platforms in the field, Databricks stands out with the nice functionality around the ease of deployment, resulting in a more standardized deployment workflow.</p>
+
+  <h2>3rd Consideration: Notebook Development Environment</h2>
+
+  <p>Notebooks enable DS and MLEs to easily get started and share knowledge. Notebooks are a key productivity enabler for my teams, and something I always evaluate seriously. In companies I have worked at, I see two common patterns:</p>
+
+  <ol>
+    <li>Self-hosted Jupyter Notebooks attached to Kubernetes clusters</li>
+    <li>Managed Notebooks (e.g. Databricks notebooks / Vertex AI Workbench notebooks) where the underlying infrastructure and administrative overheads are taken care of by the platform provider</li>
+  </ol>
+
+  <p>Method 1 definitely costs the most, in time and effort, to host and customize. I would consider this a good learning exercise, but not the most responsible way to empower teams to work fast. Someone has to administer and solve problems such as resource allocation issues, drive mounts, managing container versions, package management, security enforcement, and the list goes on.</p>
+
+  <p>Method 2 is what I always recommend. There are several choices in the market, and I have a preference for Databricks notebooks. The environment setup — with Python, SQL, and Spark — is the best with Databricks. Databricks takes care of pre-loading all the latest libraries and pre-configures them to interoperate well with each other.</p>
+
+  <h3>Other evaluation criteria</h3>
+
+  <p>Looking across managed notebooks, I can summarise my key evaluation criteria:</p>
+
+  <ul>
+    <li><strong>Transparency:</strong> Databricks provides the most transparent AutoML offering. Their glass box approach allows you to download the notebooks associated with your AutoML runs, giving data scientists full confidence in getting to a minimal viable model rapidly.</li>
+    <li><strong>Multi-Language Support:</strong> A DS or MLE can work with their language of choice — Python, SQL, R, Scala, Java — in a notebook, and even mix and match languages in the same notebook.</li>
+    <li><strong>Feature Store Integration:</strong> One of the most important features. At one of the companies I worked at, we spent a lot of effort setting up our own feature store that supported streaming features. It is advantageous to have a readily-available production-ready Feature Store.</li>
+  </ul>
+
+  <h2>Conclusion</h2>
+
+  <p>There are a lot of other smaller challenges I have been through with my teams in the past, however, I think these are the major ones that you should consider when choosing an ML platform for your team.</p>
+
+  <div class="callout">
+    <p><strong>The three pillars:</strong> 1. Cloud & Platform Portability. 2. Simplicity of Data Science tooling. 3. Notebook & Collaboration experience. Hopefully next time when you have to build or evaluate the setup of your Machine Learning Platforms, you can use the above to decide what should be used.</p>
+  </div>
+</article>
+
+<div class="article-footer sr">
+  <div class="author-card">
+    <img src="Headshot%20zoom%20in%20wedding.jpeg" alt="Alexander Kwok" class="author-img">
+    <div>
+      <div class="author-name">Alexander Kwok</div>
+      <div class="author-bio">Head of DS & ML Engineering at Linkby · Ex-AWS L6 · WooliesX · Sydney</div>
+    </div>
+  </div>
+  <div class="next-posts">
+    <a href="post-agents.html" class="next-card">
+      <div class="next-label">← Previous</div>
+      <div class="next-title">Everyone is building AI agents. Most will not make it to production.</div>
+    </a>
+    <a href="post-interface.html" class="next-card">
+      <div class="next-label">Next →</div>
+      <div class="next-title">Build the Interface, Not the Model: The Architecture of a Model-Agnostic Agent</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="fl-left">© 2026 Alexander Kwok &nbsp;·&nbsp; Sydney, Australia</div>
+    <div class="fl-links">
+      <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank">LinkedIn</a>
+      <a href="writing.html">Writing</a>
+      <a href="index.html#newsletter">Newsletter</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+function anim(){cursor.style.left=mx+'px';cursor.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);}
+anim();
+const obs=new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

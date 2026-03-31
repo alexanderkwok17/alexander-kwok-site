@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alexander Kwok — Engineering the other 80%</title>
 <meta name="description" content="Head of Data Science & ML Engineering. Building production AI/ML systems at AWS, WooliesX, and Linkby. Sydney, Australia.">
+<meta property="og:title" content="Alexander Kwok — Engineering the other 80%">
+<meta property="og:description" content="Head of Data Science & ML Engineering. Building production AI/ML systems at AWS, WooliesX, and Linkby. Sydney, Australia.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alexander-kwok.com/">
+<meta property="og:image" content="https://alexander-kwok.com/Headshot%20zoom%20in%20wedding.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Alexander Kwok — Engineering the other 80%">
+<meta name="twitter:description" content="Head of Data Science & ML Engineering. Building production AI/ML systems at AWS, WooliesX, and Linkby.">
+<meta name="twitter:image" content="https://alexander-kwok.com/Headshot%20zoom%20in%20wedding.jpeg">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -445,7 +455,7 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
       <p class="sec-sub">Practical insights on production ML, AI agents, and what actually works when shipping AI at scale.</p>
     </div>
     <div class="writing-grid">
-      <a href="https://alexander-kwok.com/ai-model-20-percent-problem/" target="_blank" class="writing-card featured sr">
+      <a href="post-model.html" class="writing-card featured sr">
         <div style="flex:1">
           <div class="wc-tag">Production ML &nbsp;·&nbsp; Featured</div>
           <div class="wc-title">The model is 20% of the problem. Here is what kills the other 80%.</div>
@@ -454,7 +464,7 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
         </div>
         <span class="wc-arrow">↗</span>
       </a>
-      <a href="https://alexander-kwok.com/ai-marketing-automation-small-business/" target="_blank" class="writing-card sr sr-d1">
+      <a href="post-wife.html" class="writing-card sr sr-d1">
         <div class="wc-tag">AI Agents &nbsp;·&nbsp; Claude Code</div>
         <div class="wc-title">I gave my wife her Saturdays back. Here is how I built the system.</div>
         <div class="wc-excerpt">One weekend. One model-agnostic AI marketing system. Social media, SEO, email — automated.</div>
@@ -462,18 +472,28 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
         <span class="wc-arrow">↗</span>
       </a>
       <a href="post-linkby.html" class="writing-card sr sr-d2">
-        <div class="coming-soon">Coming Thursday</div>
         <div class="wc-tag">Build-in-public</div>
         <div class="wc-title">9 months. A blank slate. A one-pizza team. Here is what we shipped.</div>
-        <div class="wc-meta">Publishing Thursday</div>
-        <span class="wc-arrow" style="opacity:.25">↗</span>
+        <div class="wc-meta">Mar 2026 &nbsp;·&nbsp; 6 min read</div>
+        <span class="wc-arrow">↗</span>
       </a>
       <a href="post-agents.html" class="writing-card sr sr-d3">
-        <div class="coming-soon">Coming Monday</div>
         <div class="wc-tag">Hot take</div>
         <div class="wc-title">Everyone is building AI agents. Most will not make it to production.</div>
-        <div class="wc-meta">Publishing Monday</div>
-        <span class="wc-arrow" style="opacity:.25">↗</span>
+        <div class="wc-meta">Apr 2026 &nbsp;·&nbsp; 5 min read</div>
+        <span class="wc-arrow">↗</span>
+      </a>
+      <a href="post-ml-platform.html" class="writing-card sr">
+        <div class="wc-tag">MLOps · Platform Engineering</div>
+        <div class="wc-title">Selecting an Effective & Productive Machine Learning Platform</div>
+        <div class="wc-meta">Mar 2026 &nbsp;·&nbsp; 8 min read</div>
+        <span class="wc-arrow">↗</span>
+      </a>
+      <a href="post-interface.html" class="writing-card sr">
+        <div class="wc-tag">AI Architecture · Production ML</div>
+        <div class="wc-title">Build the Interface, Not the Model: The Architecture of a Model-Agnostic Agent</div>
+        <div class="wc-meta">Mar 2026 &nbsp;·&nbsp; 7 min read</div>
+        <span class="wc-arrow">↗</span>
       </a>
     </div>
     <div style="text-align:center;margin-top:40px" class="sr">
@@ -507,11 +527,13 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
     <div class="nl-eyebrow">Newsletter</div>
     <h2 class="nl-title">Insights without<br>the hype.</h2>
     <p class="nl-desc">Production ML tips, AI agent workflows, and honest takes on what actually works — directly to your inbox. No noise, no sponsored content.</p>
-    <form class="nl-form" action="https://alexander-kwok.com/#/portal/signup" target="_blank">
-      <input type="email" class="nl-input" placeholder="your@email.com">
-      <button type="submit" class="nl-btn">Subscribe</button>
+    <form class="nl-form" id="nlForm" action="https://formspree.io/f/mvzvrazy" method="POST">
+      <input type="text" name="_gotcha" style="display:none">
+      <input type="hidden" name="_subject" value="New newsletter subscriber">
+      <input type="email" name="email" class="nl-input" placeholder="your@email.com" required>
+      <button type="submit" class="nl-btn" id="nlBtn">Subscribe</button>
     </form>
-    <p class="nl-note">No spam. Unsubscribe any time.</p>
+    <p class="nl-note" id="nlStatus">No spam. Unsubscribe any time.</p>
   </div>
 </section>
 
@@ -528,18 +550,21 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
             <span class="c-icon">💼</span>
             <div><div class="c-lbl">LinkedIn</div><div class="c-val">linkedin.com/in/alexander-k-ds</div></div>
           </a>
-          <a href="https://alexander-kwok.com" target="_blank" class="c-link">
+          <a href="writing.html" class="c-link">
             <span class="c-icon">✍️</span>
             <div><div class="c-lbl">Writing</div><div class="c-val">alexander-kwok.com</div></div>
           </a>
         </div>
       </div>
       <div class="sr sr-d2">
-        <form onsubmit="handleForm(event)">
-          <div class="fg"><label class="fl">Name</label><input class="fi" type="text" placeholder="Your name"></div>
-          <div class="fg"><label class="fl">Email</label><input class="fi" type="email" placeholder="your@email.com"></div>
-          <div class="fg"><label class="fl">What are you building?</label><textarea class="ft" placeholder="Tell me about your AI or data challenge..."></textarea></div>
+        <form id="contactForm" action="https://formspree.io/f/mkopbroy" method="POST">
+          <input type="hidden" name="_subject" value="New lead from alexander-kwok.com">
+          <input type="text" name="_gotcha" style="display:none">
+          <div class="fg"><label class="fl">Name</label><input class="fi" type="text" name="name" placeholder="Your name" required></div>
+          <div class="fg"><label class="fl">Email</label><input class="fi" type="email" name="email" placeholder="your@email.com" required></div>
+          <div class="fg"><label class="fl">What are you building?</label><textarea class="ft" name="message" placeholder="Tell me about your AI or data challenge..." required></textarea></div>
           <button type="submit" class="fsub" id="formBtn">Send message</button>
+          <p id="formStatus" style="font-family:var(--mono);font-size:11px;margin-top:12px;letter-spacing:.04em;display:none"></p>
         </form>
       </div>
     </div>
@@ -552,7 +577,7 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
     <div class="fl-left">© 2026 Alexander Kwok &nbsp;·&nbsp; Sydney, Australia</div>
     <div class="fl-links">
       <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank">LinkedIn</a>
-      <a href="https://alexander-kwok.com" target="_blank">Blog</a>
+      <a href="writing.html">Writing</a>
       <a href="#newsletter">Newsletter</a>
     </div>
   </div>
@@ -577,10 +602,6 @@ window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60)
 
 // SCROLL REVEAL
 const srEls=document.querySelectorAll('.sr');
-new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
-},{threshold:.12,rootMargin:'0px 0px -60px 0px'}).observe
-// use forEach instead
 const revealObs=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
 },{threshold:.1,rootMargin:'0px 0px -60px 0px'});
@@ -602,21 +623,59 @@ if(wr){
 
 // STICKY PROJECT ACTIVATION
 const projBlocks=document.querySelectorAll('.project-block');
-new IntersectionObserver((entries)=>{
-  entries.forEach(e=>e.target.classList.toggle('active',e.isIntersecting));
-},{threshold:.5,rootMargin:'-15% 0px -15% 0px'}).observe
 const projObs=new IntersectionObserver((entries)=>{
   entries.forEach(e=>e.target.classList.toggle('active',e.isIntersecting));
 },{threshold:.4,rootMargin:'-10% 0px -10% 0px'});
 projBlocks.forEach(b=>projObs.observe(b));
 
-// FORM
-function handleForm(e){
-  e.preventDefault();
-  const btn=document.getElementById('formBtn');
-  btn.textContent='Message sent ✓';
-  btn.style.background='#0F766E';btn.style.color='#fff';
-  setTimeout(()=>{btn.textContent='Send message';btn.style.background='';btn.style.color='';},3000);
+// CONTACT FORM (Formspree AJAX)
+const contactForm=document.getElementById('contactForm');
+if(contactForm){
+  contactForm.addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const btn=document.getElementById('formBtn');
+    const status=document.getElementById('formStatus');
+    btn.textContent='Sending...';btn.disabled=true;
+    try{
+      const res=await fetch(contactForm.action,{method:'POST',body:new FormData(contactForm),headers:{'Accept':'application/json'}});
+      if(res.ok){
+        btn.textContent='Message sent ✓';btn.style.background='#0F766E';btn.style.color='#fff';
+        contactForm.reset();
+        status.textContent='Thanks! I\'ll get back to you within 24 hours.';
+        status.style.color='var(--teal)';status.style.display='block';
+      }else{
+        throw new Error('Form submission failed');
+      }
+    }catch(err){
+      btn.textContent='Send message';btn.disabled=false;
+      status.textContent='Something went wrong. Try emailing me directly via LinkedIn.';
+      status.style.color='#F87171';status.style.display='block';
+    }
+    setTimeout(()=>{btn.textContent='Send message';btn.style.background='';btn.style.color='';btn.disabled=false;},5000);
+  });
+}
+
+// NEWSLETTER FORM (Formspree AJAX)
+const nlForm=document.getElementById('nlForm');
+if(nlForm){
+  nlForm.addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const btn=document.getElementById('nlBtn');
+    const status=document.getElementById('nlStatus');
+    btn.textContent='Subscribing...';btn.disabled=true;
+    try{
+      const res=await fetch(nlForm.action,{method:'POST',body:new FormData(nlForm),headers:{'Accept':'application/json'}});
+      if(res.ok){
+        btn.textContent='Subscribed ✓';btn.style.background='#0F766E';btn.style.color='#fff';
+        nlForm.reset();
+        status.textContent='You\'re in! First issue drops next week.';status.style.color='var(--teal)';
+      }else{throw new Error();}
+    }catch(err){
+      btn.textContent='Subscribe';btn.disabled=false;
+      status.textContent='Something went wrong. Try again?';status.style.color='#F87171';
+    }
+    setTimeout(()=>{btn.textContent='Subscribe';btn.style.background='';btn.style.color='';btn.disabled=false;},5000);
+  });
 }
 </script>
 </body>

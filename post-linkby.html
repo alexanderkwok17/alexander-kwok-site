@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>9 months. A blank slate. A one-pizza team. — Alexander Kwok</title>
 <meta name="description" content="How a one-pizza team with AI-augmented engineering outshipped a conventional team three times its size. The Linkby story.">
+<meta property="og:title" content="9 months. A blank slate. A one-pizza team. — Alexander Kwok">
+<meta property="og:description" content="How a one-pizza team with AI-augmented engineering outshipped a conventional team three times its size.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://alexander-kwok.com/post-linkby.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="9 months. A blank slate. A one-pizza team.">
+<meta name="twitter:description" content="How a one-pizza team with AI-augmented engineering outshipped a conventional team three times its size.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -153,16 +161,16 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
 
 <div class="article-footer sr">
   <div class="author-card">
-    <img src="https://alexander-kwok.com/content/images/2026/03/Headshot-zoom-in-wedding.jpeg" alt="Alexander Kwok" class="author-img">
+    <img src="Headshot%20zoom%20in%20wedding.jpeg" alt="Alexander Kwok" class="author-img">
     <div>
       <div class="author-name">Alexander Kwok</div>
       <div class="author-bio">Head of DS & ML Engineering at Linkby · Ex-AWS L6 · WooliesX · Sydney</div>
     </div>
   </div>
   <div class="next-posts">
-    <a href="https://alexander-kwok.com/ai-model-20-percent-problem/" target="_blank" class="next-card">
+    <a href="post-wife.html" class="next-card">
       <div class="next-label">← Previous</div>
-      <div class="next-title">The model is 20% of the problem. Here is what kills the other 80%.</div>
+      <div class="next-title">I gave my wife her Saturdays back. Here is how I built the system.</div>
     </a>
     <a href="post-agents.html" class="next-card">
       <div class="next-label">Next →</div>
@@ -188,7 +196,6 @@ let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 function anim(){cursor.style.left=mx+'px';cursor.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);}
 anim();
-new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1}).observe
 const obs=new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
 document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
 </script>

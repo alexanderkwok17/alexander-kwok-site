@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The model is 20% of the problem. Here is what kills the other 80%. — Alexander Kwok</title>
+<meta name="description" content="Four failure modes from 10+ years shipping ML in production — silent pipeline failures, real-time serving issues, undetected model drift, and misaligned integration.">
+<meta property="og:title" content="The model is 20% of the problem. Here is what kills the other 80%.">
+<meta property="og:description" content="Four failure modes from 10+ years shipping ML in production — silent pipeline failures, real-time serving issues, undetected model drift, and misaligned integration.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://alexander-kwok.com/post-model.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The model is 20% of the problem. Here is what kills the other 80%.">
+<meta name="twitter:description" content="Four failure modes from 10+ years shipping ML in production.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050507;--bg2:#08080C;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--teal:#0CCFBE;--teal2:#0D9488;--teal-glow:rgba(12,207,190,0.1);--white:#FAFCFF;--off:#8B9AB5;--dim:#3D4F63;--display:'Bricolage Grotesque',sans-serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+#cursor{position:fixed;width:8px;height:8px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(12,207,190,0.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94)}
+body:has(a:hover) #cursor{width:16px;height:16px}
+body:has(a:hover) #cursor-ring{width:60px;height:60px;opacity:.4}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,7,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-pip{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--off);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-btn{background:transparent!important;color:var(--teal)!important;border:1px solid rgba(12,207,190,.35)!important;padding:8px 18px!important;border-radius:100px!important;transition:all .22s!important}
+.nav-btn:hover{background:var(--teal-glow)!important;color:var(--white)!important}
+.article-hero{padding:120px 48px 60px;max-width:800px;margin:0 auto}
+.article-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:10px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .1s}
+.article-tag::before{content:'';width:20px;height:1px;background:var(--teal)}
+.article-title{font-family:var(--display);font-size:clamp(2.4rem,5vw,4.2rem);font-weight:800;letter-spacing:-.04em;line-height:1.0;color:var(--white);margin-bottom:24px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .2s}
+.article-meta{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.06em;margin-bottom:48px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .3s}
+.article-divider{height:1px;background:var(--border);margin-bottom:60px}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.article-body{max-width:680px;margin:0 auto;padding:0 48px 100px}
+.article-body p{font-size:18px;color:var(--off);line-height:1.82;margin-bottom:1.6em;font-weight:400}
+.article-body p strong{color:var(--white);font-weight:600}
+.article-body h2{font-family:var(--display);font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em;color:var(--white);margin-top:2.5em;margin-bottom:.75em;padding-top:1em;border-top:1px solid rgba(12,207,190,.15)}
+.article-body h3{font-family:var(--display);font-size:1.25rem;font-weight:700;letter-spacing:-.025em;color:var(--white);margin-top:2em;margin-bottom:.6em}
+.article-body ul,.article-body ol{margin:0 0 1.6em 1.5em;color:var(--off)}
+.article-body li{font-size:17px;line-height:1.75;margin-bottom:.5em}
+.article-body li strong{color:var(--white);font-weight:600}
+.article-body hr{border:none;border-top:1px solid var(--border);margin:2.5em 0}
+.article-body blockquote{border-left:2px solid var(--teal);padding:16px 0 16px 24px;margin:2em 0;font-family:var(--display);font-size:1.2rem;font-weight:600;letter-spacing:-.02em;color:var(--white);line-height:1.4}
+.callout{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:20px 24px;margin:2em 0}
+.callout p{margin-bottom:0;font-size:16px}
+.back-link{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-bottom:60px;padding:10px 18px;border:1px solid rgba(12,207,190,.25);border-radius:100px;transition:all .2s}
+.back-link:hover{background:var(--teal-glow);color:var(--white)}
+.article-footer{max-width:680px;margin:0 auto;padding:0 48px 100px;border-top:1px solid var(--border);padding-top:60px}
+.author-card{display:flex;align-items:center;gap:20px;margin-bottom:40px}
+.author-img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(12,207,190,.3)}
+.author-name{font-family:var(--display);font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--white);margin-bottom:4px}
+.author-bio{font-size:13px;color:var(--off)}
+.next-posts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.next-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;text-decoration:none;transition:all .25s}
+.next-card:hover{border-color:rgba(12,207,190,.25);transform:translateY(-2px)}
+.next-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.next-title{font-family:var(--display);font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--white);line-height:1.3}
+footer{padding:36px 48px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.fl-left{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.fl-links{display:flex;gap:28px}
+.fl-links a{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.fl-links a:hover{color:var(--teal)}
+.sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.sr.visible{opacity:1;transform:translateY(0)}
+@media(max-width:768px){body{cursor:auto}#cursor,#cursor-ring{display:none}.nav-links{display:none}.article-hero,.article-body,.article-footer{padding-left:20px;padding-right:20px}.next-posts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-pip"></span>Alexander Kwok</a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Work</a></li>
+    <li><a href="index.html#principles">Principles</a></li>
+    <li><a href="writing.html">Writing</a></li>
+    <li><a href="index.html#toolkit">AI Toolkit</a></li>
+    <li><a href="index.html#contact" class="nav-btn">Get in touch</a></li>
+  </ul>
+</nav>
+
+<div class="article-hero">
+  <div class="article-tag">Production ML</div>
+  <h1 class="article-title">The model is 20% of the problem. Here is what kills the other 80%.</h1>
+  <div class="article-meta">Alexander Kwok &nbsp;·&nbsp; Mar 2026 &nbsp;·&nbsp; 6 min read</div>
+  <div class="article-divider"></div>
+</div>
+
+<div style="max-width:800px;margin:0 auto;padding:0 48px">
+  <img src="The%20model%20is%2020%25%20of%20the%20problem.%20Here%20is%20what%20kills%20the%20other%2080%25.jpg" alt="The model is 20% of the problem" style="width:100%;border-radius:12px;margin-bottom:60px;border:1px solid rgba(255,255,255,0.08)">
+</div>
+
+<article class="article-body">
+  <a href="writing.html" class="back-link">← All writing</a>
+
+  <p>Most AI projects don't fail because the model was wrong.</p>
+
+  <p>They fail because teams obsess over the algorithm — and nobody solves what comes after it.</p>
+
+  <p>After 10+ years shipping ML systems at AWS, WooliesX, and Linkby, here is what actually kills AI projects in production.</p>
+
+  <hr>
+
+  <h2>1. Silent Pipeline Failures</h2>
+
+  <p>The pipeline breaks at 3am. No alert. No error. The model scores on stale data for six days before anyone notices the predictions stopped making sense.</p>
+
+  <p>This is the most common failure mode I have seen across every organisation I have worked with. The model gets all the attention during development. The pipeline that feeds it gets bolted on at the end. It works in staging. It breaks in production in a way nobody anticipated.</p>
+
+  <p><strong>The fix:</strong> treat pipeline monitoring as a first-class deliverable, not an afterthought. Alert on data freshness, not just model errors.</p>
+
+  <h2>2. Real-time Serving Issues</h2>
+
+  <p>The feature store works flawlessly in the notebook. Then you try to serve it at scale and discover your latency is 4 seconds. The product team needed 200 milliseconds. Back to zero.</p>
+
+  <p>I lived through this at WooliesX. We built beautiful models in offline evaluation. Moving to real-time serving on millions of customers required rebuilding the feature engineering layer entirely. The model was never the bottleneck — the infrastructure was.</p>
+
+  <p><strong>The fix:</strong> design for serving latency requirements from day one. Build your feature store with production constraints in mind, not batch processing constraints.</p>
+
+  <h2>3. Undetected Model Drift</h2>
+
+  <p>Customer behaviour shifted three months ago — but nobody built monitoring. The model is still optimising for a world that no longer exists. Your stakeholders just think the model is bad.</p>
+
+  <p>At Linkby, I built drift monitoring into the platform from week one. Not because I expected drift — because I knew it was inevitable. Every production model drifts. The question is whether you catch it in three days or three months.</p>
+
+  <p><strong>The fix:</strong> agree on drift thresholds and alerting before deployment. Set up automated retraining pipelines where the business case justifies the cost.</p>
+
+  <h2>4. Misaligned Integration</h2>
+
+  <p>The stakeholders needed insights in Salesforce. You built a beautiful API. Nobody told you the sales team does not use APIs. Six months of work. Zero adoption.</p>
+
+  <p>This one hurts because it is entirely preventable. The technical work is often excellent. The failure is in not asking the right questions early enough — how will this actually be consumed, by whom, in which system, in what format.</p>
+
+  <p><strong>The fix:</strong> start with the consumption layer, not the model. Work backwards from where the output needs to live.</p>
+
+  <h2>The rule that changes everything</h2>
+
+  <p>I have watched teams spend a year perfecting a model that never shipped. I have also watched scrappy teams get a good enough model into production in six weeks and generate millions in revenue.</p>
+
+  <p>Why? Because they followed one rule: <strong>treat your infrastructure as seriously as your algorithm.</strong></p>
+
+  <blockquote>The model is maybe 20% of the problem. The other 80% is what separates the teams that ship from the teams that demo.</blockquote>
+
+  <p>What has killed an AI project in your organisation — and was it ever actually the model? I would genuinely like to know. Drop a comment on <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank" style="color:var(--teal)">LinkedIn</a>.</p>
+</article>
+
+<div class="article-footer sr">
+  <div class="author-card">
+    <img src="Headshot%20zoom%20in%20wedding.jpeg" alt="Alexander Kwok" class="author-img">
+    <div>
+      <div class="author-name">Alexander Kwok</div>
+      <div class="author-bio">Head of DS & ML Engineering at Linkby · Ex-AWS L6 · WooliesX · Sydney</div>
+    </div>
+  </div>
+  <div class="next-posts">
+    <div class="next-card" style="background:var(--border);cursor:default;opacity:0.5">
+      <div class="next-label">← Previous</div>
+      <div class="next-title" style="color:var(--dim)">No previous post</div>
+    </div>
+    <a href="post-wife.html" class="next-card">
+      <div class="next-label">Next →</div>
+      <div class="next-title">I gave my wife her Saturdays back. Here is how I built the system.</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="fl-left">© 2026 Alexander Kwok &nbsp;·&nbsp; Sydney, Australia</div>
+    <div class="fl-links">
+      <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank">LinkedIn</a>
+      <a href="writing.html">Writing</a>
+      <a href="index.html#newsletter">Newsletter</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+function anim(){cursor.style.left=mx+'px';cursor.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);}
+anim();
+const obs=new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
