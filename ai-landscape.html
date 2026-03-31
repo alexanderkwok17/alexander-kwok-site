@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The AI Landscape — Interactive Knowledge Graph | Alexander Kwok</title>
+<meta name="description" content="An interactive knowledge graph exploring the AI/ML ecosystem — models, companies, researchers, and the connections between them.">
+<meta property="og:title" content="The AI Landscape — Interactive Knowledge Graph">
+<meta property="og:description" content="Explore the AI/ML ecosystem through an interactive force-directed knowledge graph. Built by Alexander Kwok.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alexander-kwok.com/ai-landscape.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050507;--bg2:#08080C;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --teal:#0CCFBE;--teal2:#0D9488;--teal-glow:rgba(12,207,190,0.15);
+  --white:#FAFCFF;--off:#8B9AB5;--dim:#3D4F63;
+  --display:'Bricolage Grotesque',sans-serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --model:#0CCFBE;--company:#6366F1;--researcher:#F59E0B;--concept:#EC4899;--paper:#22D3EE;--infra:#10B981;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.5;overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── Top bar ── */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(5,5,7,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.top-bar a.logo{color:var(--white);text-decoration:none;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px}
+.top-bar a.logo .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}
+.top-bar h1{font-family:var(--display);font-size:18px;font-weight:700;letter-spacing:-0.03em;background:linear-gradient(135deg,var(--white),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.top-bar .controls{display:flex;align-items:center;gap:12px}
+
+/* ── Search ── */
+.search-wrap{position:relative}
+.search-wrap input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px 8px 36px;color:var(--white);font-family:var(--sans);font-size:13px;width:240px;outline:none;transition:border-color 0.2s}
+.search-wrap input:focus{border-color:var(--teal)}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--dim);width:16px;height:16px}
+
+/* ── Filters ── */
+.filters{position:fixed;top:72px;left:20px;z-index:90;display:flex;flex-direction:column;gap:6px;padding:12px;background:rgba(8,8,12,0.9);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:12px}
+.filter-btn{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--off);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.filter-btn .swatch{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.filter-btn.active{background:var(--surface);color:var(--white);border-color:rgba(255,255,255,0.15)}
+.filter-btn:hover{background:var(--surface);color:var(--white)}
+.filter-btn .count{font-family:var(--mono);font-size:10px;color:var(--dim);margin-left:auto}
+
+/* ── Stats bar ── */
+.stats-bar{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:90;display:flex;gap:24px;padding:10px 24px;background:rgba(8,8,12,0.9);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:12px}
+.stat{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--off)}
+.stat strong{color:var(--white);font-family:var(--mono);font-weight:500}
+
+/* ── Detail panel ── */
+.detail-panel{position:fixed;top:72px;right:20px;width:320px;z-index:90;background:rgba(8,8,12,0.95);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:24px;transform:translateX(360px);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;max-height:calc(100vh - 100px)}
+.detail-panel.open{transform:translateX(0)}
+.detail-panel .close-btn{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--dim);cursor:pointer;font-size:18px;padding:4px 8px;border-radius:4px;transition:color 0.2s}
+.detail-panel .close-btn:hover{color:var(--white)}
+.detail-panel .entity-type{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.detail-panel .entity-name{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:-0.03em;margin-bottom:12px;line-height:1.2}
+.detail-panel .entity-desc{color:var(--off);font-size:13px;line-height:1.6;margin-bottom:16px}
+.detail-panel .connections-title{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);margin-bottom:8px}
+.detail-panel .conn-list{display:flex;flex-direction:column;gap:4px}
+.detail-panel .conn-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;cursor:pointer;transition:background 0.15s;font-size:13px}
+.detail-panel .conn-item:hover{background:var(--surface)}
+.detail-panel .conn-item .conn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.detail-panel .conn-item .conn-rel{font-family:var(--mono);font-size:10px;color:var(--dim);margin-left:auto}
+.detail-panel .entity-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.detail-panel .meta-tag{padding:3px 8px;border-radius:4px;font-family:var(--mono);font-size:10px;background:var(--surface);color:var(--off);border:1px solid var(--border)}
+.detail-panel .url-link{display:inline-block;margin-top:8px;color:var(--teal);font-size:12px;text-decoration:none;font-family:var(--mono)}
+.detail-panel .url-link:hover{text-decoration:underline}
+
+/* ── SVG ── */
+svg{width:100%;height:100%}
+.link{stroke:var(--border);stroke-width:1;opacity:0.4;transition:opacity 0.3s,stroke 0.3s}
+.link.highlighted{stroke:var(--teal);stroke-width:2;opacity:0.9}
+.link.dimmed{opacity:0.05}
+.node-group{cursor:pointer}
+.node-group text{font-family:var(--sans);font-size:11px;fill:var(--off);pointer-events:none;transition:fill 0.3s}
+.node-group.highlighted text{fill:var(--white)}
+.node-group.dimmed circle{opacity:0.1}
+.node-group.dimmed text{opacity:0.1}
+.node-group circle{transition:opacity 0.3s,r 0.3s,filter 0.3s}
+.node-group.highlighted circle{filter:drop-shadow(0 0 8px currentColor)}
+
+/* ── Tooltip ── */
+.tooltip{position:fixed;z-index:200;padding:8px 12px;background:rgba(8,8,12,0.95);border:1px solid var(--border);border-radius:8px;pointer-events:none;opacity:0;transition:opacity 0.15s;font-size:12px;max-width:220px}
+.tooltip .tt-name{font-weight:600;color:var(--white);margin-bottom:2px}
+.tooltip .tt-type{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.05em}
+
+/* ── Legend pulse ── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.help-hint{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--dim);z-index:80;animation:pulse 3s ease-in-out infinite;pointer-events:none;font-family:var(--mono)}
+
+/* ── Loading ── */
+.loading-overlay{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s}
+.loading-overlay.hidden{opacity:0;pointer-events:none}
+.loading-overlay h2{font-family:var(--display);font-size:24px;font-weight:700;margin-bottom:8px;letter-spacing:-0.03em}
+.loading-overlay p{color:var(--off);font-size:13px}
+.loader{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loader">
+  <div class="loader"></div>
+  <h2>Building the graph...</h2>
+  <p>Arranging 80+ nodes across the AI landscape</p>
+</div>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <a href="index.html" class="logo"><span class="dot"></span> Alexander Kwok</a>
+  <h1>The AI Landscape</h1>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search" placeholder="Search nodes... (e.g. GPT, Transformer)">
+    </div>
+  </div>
+</div>
+
+<!-- Category filters -->
+<div class="filters" id="filters"></div>
+
+<!-- Detail panel -->
+<div class="detail-panel" id="detail">
+  <button class="close-btn" id="closeDetail">&times;</button>
+  <div id="detailContent"></div>
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip"></div>
+
+<!-- Help hint -->
+<div class="help-hint">Click a node to explore &middot; Scroll to zoom &middot; Drag to pan</div>
+
+<!-- Stats bar -->
+<div class="stats-bar" id="statsBar"></div>
+
+<!-- Graph -->
+<svg id="graph"></svg>
+
+<script>
+// ──────────────────────────────────────────────
+// DATA: Curated AI/ML Landscape Knowledge Graph
+// ──────────────────────────────────────────────
+const categories = {
+  model:      { label: 'Models',      color: '#0CCFBE' },
+  company:    { label: 'Companies',   color: '#6366F1' },
+  researcher: { label: 'Researchers', color: '#F59E0B' },
+  concept:    { label: 'Concepts',    color: '#EC4899' },
+  paper:      { label: 'Papers',      color: '#22D3EE' },
+  infra:      { label: 'Infrastructure', color: '#10B981' }
+};
+
+const nodes = [
+  // ── Concepts ──
+  { id: 'transformer', label: 'Transformer', type: 'concept', desc: 'The self-attention architecture that revolutionised NLP and beyond. Introduced in 2017, it replaced RNNs and enabled massive parallelisation of sequence modelling.', year: 2017, importance: 10 },
+  { id: 'attention', label: 'Attention Mechanism', type: 'concept', desc: 'The core idea: let models learn which parts of the input to focus on. Originally used in seq2seq translation, it became the backbone of the Transformer.', year: 2014, importance: 8 },
+  { id: 'diffusion', label: 'Diffusion Models', type: 'concept', desc: 'Generative models that learn to reverse a noise process. They power state-of-the-art image, video, and audio generation.', year: 2020, importance: 8 },
+  { id: 'rlhf', label: 'RLHF', type: 'concept', desc: 'Reinforcement Learning from Human Feedback. The technique that made ChatGPT conversational by aligning model outputs with human preferences.', year: 2022, importance: 9 },
+  { id: 'rag', label: 'RAG', type: 'concept', desc: 'Retrieval-Augmented Generation. Combines LLMs with external knowledge retrieval to ground responses in factual documents.', year: 2020, importance: 8 },
+  { id: 'finetuning', label: 'Fine-tuning', type: 'concept', desc: 'Adapting a pre-trained model to a specific domain or task using a smaller, targeted dataset.', year: 2018, importance: 7 },
+  { id: 'scaling_laws', label: 'Scaling Laws', type: 'concept', desc: 'The empirical finding that model performance improves predictably with more data, compute, and parameters.', year: 2020, importance: 8 },
+  { id: 'moe', label: 'Mixture of Experts', type: 'concept', desc: 'Architecture that activates only a subset of parameters per input, enabling much larger models without proportional compute cost.', year: 2017, importance: 7 },
+  { id: 'cot', label: 'Chain-of-Thought', type: 'concept', desc: 'Prompting technique that elicits step-by-step reasoning from LLMs, dramatically improving performance on complex tasks.', year: 2022, importance: 7 },
+  { id: 'agents', label: 'AI Agents', type: 'concept', desc: 'Autonomous AI systems that use tools, plan multi-step actions, and interact with environments to accomplish goals.', year: 2023, importance: 9 },
+  { id: 'multimodal', label: 'Multimodal AI', type: 'concept', desc: 'Models that can process and generate across multiple modalities: text, images, audio, video, and code.', year: 2023, importance: 8 },
+  { id: 'embeddings', label: 'Embeddings', type: 'concept', desc: 'Dense vector representations of data (text, images, etc.) that capture semantic meaning in continuous space.', year: 2013, importance: 7 },
+  { id: 'pretraining', label: 'Pre-training', type: 'concept', desc: 'Training a foundation model on massive unlabelled data before fine-tuning. The paradigm shift that enabled modern LLMs.', year: 2018, importance: 8 },
+
+  // ── Papers ──
+  { id: 'attention_paper', label: 'Attention Is All You Need', type: 'paper', desc: 'The 2017 Google Brain paper that introduced the Transformer architecture. One of the most cited papers in AI history.', year: 2017, importance: 10 },
+  { id: 'bert_paper', label: 'BERT Paper', type: 'paper', desc: 'Introduced bidirectional pre-training for language understanding. Dominated NLP benchmarks for years.', year: 2018, importance: 8 },
+  { id: 'gpt1_paper', label: 'GPT-1 Paper', type: 'paper', desc: 'OpenAI\'s first generative pre-trained Transformer. Demonstrated that unsupervised pre-training + supervised fine-tuning works.', year: 2018, importance: 7 },
+  { id: 'scaling_paper', label: 'Scaling Laws for LMs', type: 'paper', desc: 'Kaplan et al. showed that LLM loss follows power laws in compute, data, and parameters — driving the race to scale.', year: 2020, importance: 8 },
+  { id: 'ddpm_paper', label: 'DDPM Paper', type: 'paper', desc: 'Denoising Diffusion Probabilistic Models. Laid the theoretical groundwork for modern image generation.', year: 2020, importance: 7 },
+  { id: 'instruct_paper', label: 'InstructGPT Paper', type: 'paper', desc: 'Introduced RLHF at scale for language models. The direct precursor to ChatGPT.', year: 2022, importance: 8 },
+  { id: 'chinchilla_paper', label: 'Chinchilla Paper', type: 'paper', desc: 'DeepMind showed that most LLMs were over-parameterised and under-trained, shifting the field toward more data-efficient training.', year: 2022, importance: 7 },
+  { id: 'lora_paper', label: 'LoRA Paper', type: 'paper', desc: 'Low-Rank Adaptation — efficient fine-tuning by injecting trainable rank decomposition matrices. Democratised model adaptation.', year: 2021, importance: 7 },
+
+  // ── Models ──
+  { id: 'gpt4', label: 'GPT-4', type: 'model', desc: 'OpenAI\'s flagship multimodal LLM. Achieves human-level performance on many professional benchmarks.', year: 2023, importance: 10 },
+  { id: 'gpt35', label: 'ChatGPT / GPT-3.5', type: 'model', desc: 'The model that brought AI to the mainstream. 100M users in 2 months made it the fastest-growing consumer product ever.', year: 2022, importance: 9 },
+  { id: 'gpt3', label: 'GPT-3', type: 'model', desc: '175B parameter model that demonstrated few-shot learning. Showed that scale enables emergent capabilities.', year: 2020, importance: 8 },
+  { id: 'claude', label: 'Claude', type: 'model', desc: 'Anthropic\'s family of AI assistants. Known for long context windows, safety focus, and strong reasoning.', year: 2023, importance: 9 },
+  { id: 'gemini', label: 'Gemini', type: 'model', desc: 'Google DeepMind\'s natively multimodal model family. Designed from the ground up to handle text, images, audio, and video.', year: 2023, importance: 9 },
+  { id: 'llama', label: 'LLaMA / Llama 3', type: 'model', desc: 'Meta\'s open-weight LLM family. Catalysed the open-source AI movement and spawned thousands of derivatives.', year: 2023, importance: 9 },
+  { id: 'bert', label: 'BERT', type: 'model', desc: 'Google\'s bidirectional encoder. Dominated NLP for years and is still used widely in search, classification, and NER.', year: 2018, importance: 8 },
+  { id: 'dalle', label: 'DALL-E 3', type: 'model', desc: 'OpenAI\'s text-to-image model. Uses diffusion to generate photorealistic images from natural language prompts.', year: 2023, importance: 7 },
+  { id: 'midjourney', label: 'Midjourney', type: 'model', desc: 'Independent image generation model known for distinctive artistic quality. Runs via Discord.', year: 2022, importance: 7 },
+  { id: 'stable_diff', label: 'Stable Diffusion', type: 'model', desc: 'Stability AI\'s open-source image generation model. Enabled an explosion of community-built tools and fine-tunes.', year: 2022, importance: 8 },
+  { id: 'whisper', label: 'Whisper', type: 'model', desc: 'OpenAI\'s speech recognition model. Trained on 680K hours of multilingual audio, it approaches human-level transcription.', year: 2022, importance: 6 },
+  { id: 'codex', label: 'Codex / Copilot', type: 'model', desc: 'OpenAI\'s code generation model powering GitHub Copilot. Changed how developers write software.', year: 2021, importance: 8 },
+  { id: 'deepseek', label: 'DeepSeek R1', type: 'model', desc: 'Chinese lab\'s reasoning model that matched frontier performance at a fraction of the training cost. Shook the industry.', year: 2025, importance: 8 },
+  { id: 'o1', label: 'OpenAI o1', type: 'model', desc: 'OpenAI\'s reasoning model that uses chain-of-thought at inference time. Excels at math, science, and coding.', year: 2024, importance: 8 },
+  { id: 'sora', label: 'Sora', type: 'model', desc: 'OpenAI\'s text-to-video model. Generates photorealistic videos up to a minute long from text prompts.', year: 2024, importance: 7 },
+  { id: 'mistral', label: 'Mistral / Mixtral', type: 'model', desc: 'French startup\'s efficient open-weight models. Mixtral uses mixture-of-experts for strong performance at lower cost.', year: 2023, importance: 7 },
+
+  // ── Companies ──
+  { id: 'openai', label: 'OpenAI', type: 'company', desc: 'Founded 2015. Creator of GPT, DALL-E, Codex, and ChatGPT. The company that kicked off the current AI revolution.', year: 2015, importance: 10 },
+  { id: 'anthropic', label: 'Anthropic', type: 'company', desc: 'Founded 2021 by ex-OpenAI researchers. Focused on AI safety. Creator of Claude.', year: 2021, importance: 9 },
+  { id: 'google_dm', label: 'Google DeepMind', type: 'company', desc: 'Merger of Google Brain + DeepMind. Behind Gemini, AlphaFold, and the Transformer architecture itself.', year: 2023, importance: 10 },
+  { id: 'meta_ai', label: 'Meta AI', type: 'company', desc: 'Meta\'s AI research division. Champions open-source AI with LLaMA and pioneered self-supervised learning.', year: 2013, importance: 9 },
+  { id: 'nvidia', label: 'NVIDIA', type: 'company', desc: 'The compute backbone of AI. Their GPUs (H100, B200) and CUDA ecosystem power virtually all model training.', year: 1993, importance: 10 },
+  { id: 'microsoft', label: 'Microsoft', type: 'company', desc: 'OpenAI\'s primary partner and investor. Integrated AI across Azure, Office, GitHub Copilot, and Bing.', year: 1975, importance: 9 },
+  { id: 'stability', label: 'Stability AI', type: 'company', desc: 'UK startup behind Stable Diffusion. Pioneered open-source image generation.', year: 2019, importance: 6 },
+  { id: 'huggingface', label: 'Hugging Face', type: 'company', desc: 'The GitHub of ML. Hosts 500K+ models and datasets. Essential infrastructure for the open-source AI ecosystem.', year: 2016, importance: 8 },
+  { id: 'cohere', label: 'Cohere', type: 'company', desc: 'Enterprise-focused LLM company founded by Transformer co-authors. Specialises in search, RAG, and embeddings.', year: 2019, importance: 6 },
+  { id: 'mistral_co', label: 'Mistral AI', type: 'company', desc: 'French AI lab founded by ex-DeepMind and Meta researchers. Known for efficient open-weight models.', year: 2023, importance: 7 },
+  { id: 'deepseek_co', label: 'DeepSeek', type: 'company', desc: 'Chinese AI lab that stunned the industry with frontier-level models trained at dramatically lower cost.', year: 2023, importance: 7 },
+  { id: 'xai', label: 'xAI', type: 'company', desc: 'Elon Musk\'s AI company. Created Grok. Building one of the world\'s largest GPU clusters.', year: 2023, importance: 6 },
+
+  // ── Researchers ──
+  { id: 'vaswani', label: 'Ashish Vaswani', type: 'researcher', desc: 'Lead author of "Attention Is All You Need." Co-invented the Transformer at Google Brain.', year: 2017, importance: 9 },
+  { id: 'hinton', label: 'Geoffrey Hinton', type: 'researcher', desc: 'Godfather of Deep Learning. Nobel Prize 2024. Pioneered backpropagation, deep belief networks, and dropout.', year: 1986, importance: 10 },
+  { id: 'lecun', label: 'Yann LeCun', type: 'researcher', desc: 'Chief AI Scientist at Meta. Turing Award winner. Pioneered convolutional neural networks and self-supervised learning.', year: 1989, importance: 9 },
+  { id: 'bengio', label: 'Yoshua Bengio', type: 'researcher', desc: 'Turing Award winner. Pioneered neural language models, attention mechanisms, and generative adversarial networks.', year: 2003, importance: 9 },
+  { id: 'ilya', label: 'Ilya Sutskever', type: 'researcher', desc: 'Co-founder of OpenAI. Former Chief Scientist. Key architect of GPT scaling strategy. Now leading SSI.', year: 2012, importance: 9 },
+  { id: 'amodei', label: 'Dario Amodei', type: 'researcher', desc: 'CEO of Anthropic. Former VP of Research at OpenAI. Leading the AI safety-focused approach to frontier models.', year: 2021, importance: 8 },
+  { id: 'altman', label: 'Sam Altman', type: 'researcher', desc: 'CEO of OpenAI. Former Y Combinator president. The public face of the generative AI revolution.', year: 2015, importance: 9 },
+  { id: 'hassabis', label: 'Demis Hassabis', type: 'researcher', desc: 'CEO of Google DeepMind. Nobel Prize 2024. Created AlphaGo, AlphaFold, and leads Gemini development.', year: 2010, importance: 9 },
+  { id: 'karpathy', label: 'Andrej Karpathy', type: 'researcher', desc: 'Former Tesla AI Director, former OpenAI. Famous for educational content and building AI from scratch. Now independent.', year: 2015, importance: 7 },
+  { id: 'ng', label: 'Andrew Ng', type: 'researcher', desc: 'Co-founded Google Brain, former Baidu Chief Scientist. Runs DeepLearning.AI and Coursera ML courses. Educated millions.', year: 2011, importance: 8 },
+
+  // ── Infrastructure ──
+  { id: 'cuda', label: 'CUDA', type: 'infra', desc: 'NVIDIA\'s parallel computing platform. The foundational software layer that makes GPU-accelerated AI possible.', year: 2007, importance: 9 },
+  { id: 'pytorch', label: 'PyTorch', type: 'infra', desc: 'Meta\'s deep learning framework. The dominant tool for AI research, now used by ~80% of papers.', year: 2016, importance: 9 },
+  { id: 'tensorflow', label: 'TensorFlow', type: 'infra', desc: 'Google\'s ML framework. Pioneered production ML deployment with TF Serving and TFLite.', year: 2015, importance: 7 },
+  { id: 'hf_hub', label: 'HF Hub & Transformers', type: 'infra', desc: 'Hugging Face\'s model hub and Transformers library. The standard interface for using pre-trained models.', year: 2019, importance: 8 },
+  { id: 'langchain', label: 'LangChain', type: 'infra', desc: 'Framework for building LLM applications. Popularised chains, agents, and RAG patterns.', year: 2022, importance: 7 },
+  { id: 'vllm', label: 'vLLM', type: 'infra', desc: 'High-throughput LLM serving engine. Uses PagedAttention for efficient memory management during inference.', year: 2023, importance: 6 },
+  { id: 'h100', label: 'H100 / B200 GPUs', type: 'infra', desc: 'NVIDIA\'s AI accelerators. The H100 and next-gen B200 are the currency of the AI compute economy.', year: 2022, importance: 9 },
+  { id: 'tpu', label: 'Google TPU', type: 'infra', desc: 'Google\'s custom AI accelerator. Powers internal training of Gemini and is available via Google Cloud.', year: 2016, importance: 7 },
+];
+
+const edges = [
+  // Transformer connections
+  { source: 'attention', target: 'transformer', rel: 'enables' },
+  { source: 'attention_paper', target: 'transformer', rel: 'introduced' },
+  { source: 'vaswani', target: 'attention_paper', rel: 'authored' },
+  { source: 'google_dm', target: 'attention_paper', rel: 'published' },
+  { source: 'transformer', target: 'bert', rel: 'architecture' },
+  { source: 'transformer', target: 'gpt3', rel: 'architecture' },
+  { source: 'transformer', target: 'gpt4', rel: 'architecture' },
+  { source: 'transformer', target: 'claude', rel: 'architecture' },
+  { source: 'transformer', target: 'gemini', rel: 'architecture' },
+  { source: 'transformer', target: 'llama', rel: 'architecture' },
+  { source: 'transformer', target: 'mistral', rel: 'architecture' },
+  { source: 'transformer', target: 'deepseek', rel: 'architecture' },
+
+  // BERT
+  { source: 'google_dm', target: 'bert', rel: 'built' },
+  { source: 'bert_paper', target: 'bert', rel: 'introduced' },
+  { source: 'pretraining', target: 'bert', rel: 'technique' },
+
+  // GPT lineage
+  { source: 'openai', target: 'gpt3', rel: 'built' },
+  { source: 'openai', target: 'gpt35', rel: 'built' },
+  { source: 'openai', target: 'gpt4', rel: 'built' },
+  { source: 'openai', target: 'o1', rel: 'built' },
+  { source: 'gpt1_paper', target: 'gpt3', rel: 'lineage' },
+  { source: 'gpt3', target: 'gpt35', rel: 'evolved into' },
+  { source: 'gpt35', target: 'gpt4', rel: 'evolved into' },
+  { source: 'gpt4', target: 'o1', rel: 'evolved into' },
+  { source: 'rlhf', target: 'gpt35', rel: 'technique' },
+  { source: 'instruct_paper', target: 'rlhf', rel: 'formalised' },
+  { source: 'scaling_laws', target: 'gpt3', rel: 'justified' },
+  { source: 'scaling_paper', target: 'scaling_laws', rel: 'established' },
+  { source: 'pretraining', target: 'gpt3', rel: 'technique' },
+  { source: 'cot', target: 'o1', rel: 'technique' },
+  { source: 'multimodal', target: 'gpt4', rel: 'capability' },
+
+  // Claude + Anthropic
+  { source: 'anthropic', target: 'claude', rel: 'built' },
+  { source: 'rlhf', target: 'claude', rel: 'technique' },
+  { source: 'amodei', target: 'anthropic', rel: 'founded' },
+  { source: 'amodei', target: 'openai', rel: 'previously at' },
+
+  // Gemini + Google DeepMind
+  { source: 'google_dm', target: 'gemini', rel: 'built' },
+  { source: 'hassabis', target: 'google_dm', rel: 'leads' },
+  { source: 'multimodal', target: 'gemini', rel: 'capability' },
+  { source: 'google_dm', target: 'tpu', rel: 'developed' },
+  { source: 'tpu', target: 'gemini', rel: 'trained on' },
+  { source: 'chinchilla_paper', target: 'scaling_laws', rel: 'refined' },
+  { source: 'google_dm', target: 'chinchilla_paper', rel: 'published' },
+
+  // LLaMA + Meta
+  { source: 'meta_ai', target: 'llama', rel: 'built' },
+  { source: 'lecun', target: 'meta_ai', rel: 'leads' },
+  { source: 'meta_ai', target: 'pytorch', rel: 'created' },
+
+  // Diffusion ecosystem
+  { source: 'diffusion', target: 'stable_diff', rel: 'technique' },
+  { source: 'diffusion', target: 'dalle', rel: 'technique' },
+  { source: 'diffusion', target: 'midjourney', rel: 'technique' },
+  { source: 'diffusion', target: 'sora', rel: 'technique' },
+  { source: 'ddpm_paper', target: 'diffusion', rel: 'formalised' },
+  { source: 'openai', target: 'dalle', rel: 'built' },
+  { source: 'openai', target: 'sora', rel: 'built' },
+  { source: 'stability', target: 'stable_diff', rel: 'built' },
+
+  // Code + tools
+  { source: 'openai', target: 'codex', rel: 'built' },
+  { source: 'microsoft', target: 'codex', rel: 'deployed' },
+  { source: 'microsoft', target: 'openai', rel: 'invested in' },
+  { source: 'openai', target: 'whisper', rel: 'built' },
+
+  // Mistral
+  { source: 'mistral_co', target: 'mistral', rel: 'built' },
+  { source: 'moe', target: 'mistral', rel: 'technique' },
+
+  // DeepSeek
+  { source: 'deepseek_co', target: 'deepseek', rel: 'built' },
+  { source: 'moe', target: 'deepseek', rel: 'technique' },
+  { source: 'cot', target: 'deepseek', rel: 'technique' },
+
+  // xAI
+  { source: 'xai', target: 'h100', rel: 'uses' },
+
+  // RAG + agents
+  { source: 'rag', target: 'langchain', rel: 'pattern' },
+  { source: 'agents', target: 'langchain', rel: 'pattern' },
+  { source: 'embeddings', target: 'rag', rel: 'enables' },
+
+  // Infrastructure
+  { source: 'nvidia', target: 'cuda', rel: 'created' },
+  { source: 'nvidia', target: 'h100', rel: 'manufactures' },
+  { source: 'cuda', target: 'pytorch', rel: 'powers' },
+  { source: 'cuda', target: 'tensorflow', rel: 'powers' },
+  { source: 'h100', target: 'gpt4', rel: 'trained on' },
+  { source: 'h100', target: 'claude', rel: 'trained on' },
+  { source: 'h100', target: 'llama', rel: 'trained on' },
+  { source: 'google_dm', target: 'tensorflow', rel: 'created' },
+  { source: 'huggingface', target: 'hf_hub', rel: 'maintains' },
+  { source: 'hf_hub', target: 'llama', rel: 'hosts' },
+  { source: 'hf_hub', target: 'stable_diff', rel: 'hosts' },
+  { source: 'hf_hub', target: 'mistral', rel: 'hosts' },
+  { source: 'pytorch', target: 'llama', rel: 'framework' },
+  { source: 'pytorch', target: 'stable_diff', rel: 'framework' },
+  { source: 'vllm', target: 'llama', rel: 'serves' },
+  { source: 'finetuning', target: 'lora_paper', rel: 'advanced by' },
+  { source: 'lora_paper', target: 'hf_hub', rel: 'integrated in' },
+  { source: 'cohere', target: 'rag', rel: 'specialises in' },
+  { source: 'cohere', target: 'embeddings', rel: 'specialises in' },
+
+  // Researchers → companies/concepts
+  { source: 'hinton', target: 'google_dm', rel: 'previously at' },
+  { source: 'bengio', target: 'attention', rel: 'pioneered' },
+  { source: 'ilya', target: 'openai', rel: 'co-founded' },
+  { source: 'altman', target: 'openai', rel: 'leads' },
+  { source: 'karpathy', target: 'openai', rel: 'previously at' },
+  { source: 'ng', target: 'google_dm', rel: 'co-founded Brain' },
+  { source: 'pretraining', target: 'gpt1_paper', rel: 'demonstrated in' },
+];
+
+// ──────────────────────────────────────────────
+// GRAPH ENGINE
+// ──────────────────────────────────────────────
+const width = window.innerWidth;
+const height = window.innerHeight;
+let activeFilters = new Set(Object.keys(categories));
+let selectedNode = null;
+let highlightedNodes = new Set();
+
+// Build adjacency map
+const adjMap = new Map();
+nodes.forEach(n => adjMap.set(n.id, []));
+edges.forEach(e => {
+  if (adjMap.has(e.source)) adjMap.get(e.source).push({ target: e.target, rel: e.rel });
+  if (adjMap.has(e.target)) adjMap.get(e.target).push({ target: e.source, rel: e.rel });
+});
+
+// Size scale
+const sizeScale = d3.scaleSqrt().domain([5, 10]).range([6, 22]);
+
+// SVG setup
+const svg = d3.select('#graph');
+const g = svg.append('g');
+
+// Zoom
+const zoom = d3.zoom()
+  .scaleExtent([0.2, 5])
+  .on('zoom', (e) => g.attr('transform', e.transform));
+svg.call(zoom);
+
+// Links
+const linkGroup = g.append('g').attr('class', 'links');
+const link = linkGroup.selectAll('.link')
+  .data(edges)
+  .join('line')
+  .attr('class', 'link');
+
+// Nodes
+const nodeGroup = g.append('g').attr('class', 'nodes');
+const node = nodeGroup.selectAll('.node-group')
+  .data(nodes)
+  .join('g')
+  .attr('class', 'node-group')
+  .call(d3.drag()
+    .on('start', dragStart)
+    .on('drag', dragged)
+    .on('end', dragEnd));
+
+node.append('circle')
+  .attr('r', d => sizeScale(d.importance))
+  .attr('fill', d => categories[d.type].color)
+  .attr('stroke', d => categories[d.type].color)
+  .attr('stroke-width', 1.5)
+  .attr('fill-opacity', 0.15)
+  .style('color', d => categories[d.type].color);
+
+node.append('text')
+  .text(d => d.label)
+  .attr('dy', d => sizeScale(d.importance) + 14)
+  .attr('text-anchor', 'middle');
+
+// Simulation
+const simulation = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(edges).id(d => d.id).distance(90).strength(0.3))
+  .force('charge', d3.forceManyBody().strength(-350))
+  .force('center', d3.forceCenter(width / 2, height / 2))
+  .force('collision', d3.forceCollide().radius(d => sizeScale(d.importance) + 20))
+  .force('x', d3.forceX(width / 2).strength(0.03))
+  .force('y', d3.forceY(height / 2).strength(0.03))
+  .on('tick', ticked);
+
+function ticked() {
+  link
+    .attr('x1', d => d.source.x)
+    .attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x)
+    .attr('y2', d => d.target.y);
+  node.attr('transform', d => `translate(${d.x},${d.y})`);
+}
+
+// Hide loader when simulation cools
+simulation.on('end', () => {
+  document.getElementById('loader').classList.add('hidden');
+});
+setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2500);
+
+// Drag
+function dragStart(e, d) {
+  if (!e.active) simulation.alphaTarget(0.15).restart();
+  d.fx = d.x; d.fy = d.y;
+}
+function dragged(e, d) { d.fx = e.x; d.fy = e.y; }
+function dragEnd(e, d) {
+  if (!e.active) simulation.alphaTarget(0);
+  d.fx = null; d.fy = null;
+}
+
+// ──────────────────────────────────────────────
+// INTERACTIONS
+// ──────────────────────────────────────────────
+
+// Tooltip
+const tooltip = document.getElementById('tooltip');
+node.on('mouseenter', (e, d) => {
+  const color = categories[d.type].color;
+  tooltip.innerHTML = `<div class="tt-name">${d.label}</div><div class="tt-type" style="color:${color}">${categories[d.type].label} ${d.year ? '· ' + d.year : ''}</div>`;
+  tooltip.style.opacity = 1;
+}).on('mousemove', (e) => {
+  tooltip.style.left = (e.clientX + 14) + 'px';
+  tooltip.style.top = (e.clientY - 10) + 'px';
+}).on('mouseleave', () => {
+  tooltip.style.opacity = 0;
+});
+
+// Click to select
+node.on('click', (e, d) => {
+  e.stopPropagation();
+  selectNode(d);
+});
+
+svg.on('click', () => {
+  clearSelection();
+});
+
+function selectNode(d) {
+  selectedNode = d;
+  highlightedNodes.clear();
+  highlightedNodes.add(d.id);
+
+  const neighbors = adjMap.get(d.id) || [];
+  neighbors.forEach(n => highlightedNodes.add(n.target));
+
+  // Highlight nodes
+  node.classed('highlighted', n => highlightedNodes.has(n.id));
+  node.classed('dimmed', n => !highlightedNodes.has(n.id));
+
+  // Highlight links
+  link.classed('highlighted', l =>
+    (l.source.id === d.id || l.target.id === d.id));
+  link.classed('dimmed', l =>
+    !(l.source.id === d.id || l.target.id === d.id));
+
+  // Show detail panel
+  showDetail(d);
+}
+
+function clearSelection() {
+  selectedNode = null;
+  highlightedNodes.clear();
+  node.classed('highlighted', false).classed('dimmed', false);
+  link.classed('highlighted', false).classed('dimmed', false);
+  document.getElementById('detail').classList.remove('open');
+}
+
+function showDetail(d) {
+  const panel = document.getElementById('detail');
+  const content = document.getElementById('detailContent');
+  const color = categories[d.type].color;
+  const neighbors = adjMap.get(d.id) || [];
+
+  let html = `
+    <div class="entity-type" style="color:${color}">${categories[d.type].label}</div>
+    <div class="entity-name">${d.label}</div>
+    <div class="entity-meta">
+      ${d.year ? `<span class="meta-tag">${d.year}</span>` : ''}
+      <span class="meta-tag">Importance: ${d.importance}/10</span>
+      <span class="meta-tag">${neighbors.length} connections</span>
+    </div>
+    <div class="entity-desc">${d.desc}</div>
+    <div class="connections-title">Connections (${neighbors.length})</div>
+    <div class="conn-list">
+  `;
+
+  neighbors.forEach(n => {
+    const target = nodes.find(nd => nd.id === n.target);
+    if (target) {
+      const c = categories[target.type].color;
+      html += `<div class="conn-item" data-id="${target.id}"><span class="conn-dot" style="background:${c}"></span>${target.label}<span class="conn-rel">${n.rel}</span></div>`;
+    }
+  });
+
+  html += '</div>';
+  content.innerHTML = html;
+  panel.classList.add('open');
+
+  // Click on connection to navigate
+  content.querySelectorAll('.conn-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const target = nodes.find(n => n.id === el.dataset.id);
+      if (target) selectNode(target);
+    });
+  });
+}
+
+document.getElementById('closeDetail').addEventListener('click', clearSelection);
+
+// ──────────────────────────────────────────────
+// FILTERS
+// ──────────────────────────────────────────────
+const filtersEl = document.getElementById('filters');
+Object.entries(categories).forEach(([key, val]) => {
+  const count = nodes.filter(n => n.type === key).length;
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn active';
+  btn.dataset.type = key;
+  btn.innerHTML = `<span class="swatch" style="background:${val.color}"></span>${val.label}<span class="count">${count}</span>`;
+  btn.addEventListener('click', () => toggleFilter(key, btn));
+  filtersEl.appendChild(btn);
+});
+
+function toggleFilter(type, btn) {
+  if (activeFilters.has(type)) {
+    activeFilters.delete(type);
+    btn.classList.remove('active');
+  } else {
+    activeFilters.add(type);
+    btn.classList.add('active');
+  }
+  applyFilters();
+}
+
+function applyFilters() {
+  node.style('display', d => activeFilters.has(d.type) ? null : 'none');
+  link.style('display', d => {
+    const sType = typeof d.source === 'object' ? d.source.type : nodes.find(n => n.id === d.source)?.type;
+    const tType = typeof d.target === 'object' ? d.target.type : nodes.find(n => n.id === d.target)?.type;
+    return activeFilters.has(sType) && activeFilters.has(tType) ? null : 'none';
+  });
+  updateStats();
+}
+
+// ──────────────────────────────────────────────
+// SEARCH
+// ──────────────────────────────────────────────
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.toLowerCase().trim();
+  if (!q) {
+    clearSelection();
+    return;
+  }
+  const matches = nodes.filter(n =>
+    n.label.toLowerCase().includes(q) ||
+    n.desc.toLowerCase().includes(q) ||
+    n.type.toLowerCase().includes(q)
+  );
+  if (matches.length === 1) {
+    selectNode(matches[0]);
+    // Pan to node
+    const t = d3.zoomIdentity.translate(width/2 - matches[0].x, height/2 - matches[0].y);
+    svg.transition().duration(600).call(zoom.transform, t);
+  } else if (matches.length > 1) {
+    highlightedNodes.clear();
+    matches.forEach(m => highlightedNodes.add(m.id));
+    node.classed('highlighted', n => highlightedNodes.has(n.id));
+    node.classed('dimmed', n => !highlightedNodes.has(n.id));
+    link.classed('dimmed', true).classed('highlighted', false);
+  }
+});
+
+// ──────────────────────────────────────────────
+// STATS
+// ──────────────────────────────────────────────
+function updateStats() {
+  const visibleNodes = nodes.filter(n => activeFilters.has(n.type)).length;
+  const visibleEdges = edges.filter(e => {
+    const s = typeof e.source === 'object' ? e.source : nodes.find(n => n.id === e.source);
+    const t = typeof e.target === 'object' ? e.target : nodes.find(n => n.id === e.target);
+    return s && t && activeFilters.has(s.type) && activeFilters.has(t.type);
+  }).length;
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat"><strong>${visibleNodes}</strong> nodes</div>
+    <div class="stat"><strong>${visibleEdges}</strong> connections</div>
+    <div class="stat"><strong>${Object.keys(categories).length}</strong> categories</div>
+    <div class="stat">Span <strong>2007 – 2025</strong></div>
+  `;
+}
+updateStats();
+
+// ──────────────────────────────────────────────
+// KEYBOARD
+// ──────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    clearSelection();
+    searchInput.value = '';
+    searchInput.blur();
+  }
+  if (e.key === '/' && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+  }
+});
+
+// Resize
+window.addEventListener('resize', () => {
+  simulation.force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
+  simulation.alpha(0.1).restart();
+});
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>
