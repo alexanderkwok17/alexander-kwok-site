@@ -222,5 +222,6 @@ anim();
 const obs=new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
 document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
 </script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
