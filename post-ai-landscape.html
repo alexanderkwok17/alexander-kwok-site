@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Build the Interface, Not the Model: The Architecture of a Model-Agnostic Agent — Alexander Kwok</title>
-<meta name="description" content="How to build a high-volume AI automation system that doesn't go bankrupt on API costs. The architecture of OpenClaw — a model-agnostic agent with cost-routing logic.">
-<meta property="og:title" content="Build the Interface, Not the Model: The Architecture of a Model-Agnostic Agent">
-<meta property="og:description" content="How to build a high-volume AI automation system that doesn't go bankrupt on API costs.">
+<title>I mapped the entire AI ecosystem into one interactive graph. Here's what it revealed. — Alexander Kwok</title>
+<meta name="description" content="80+ nodes, 100+ connections, 6 categories. I built an interactive knowledge graph of the AI landscape — and the structure tells a story most people miss.">
+<meta property="og:title" content="I mapped the entire AI ecosystem into one interactive graph.">
+<meta property="og:description" content="80+ nodes, 100+ connections, 6 categories. The structure of the AI landscape tells a story most people miss.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://alexander-kwok.com/post-interface.html">
+<meta property="og:url" content="https://alexander-kwok.com/post-ai-landscape.html">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Build the Interface, Not the Model">
-<meta name="twitter:description" content="The architecture of a model-agnostic agent with cost-routing logic.">
+<meta name="twitter:title" content="I mapped the entire AI ecosystem into one interactive graph.">
+<meta name="twitter:description" content="80+ nodes, 100+ connections. The AI landscape tells a story most people miss.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,20 +50,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;ali
 .article-body li strong{color:var(--white);font-weight:600}
 .article-body hr{border:none;border-top:1px solid var(--border);margin:2.5em 0}
 .article-body blockquote{border-left:2px solid var(--teal);padding:16px 0 16px 24px;margin:2em 0;font-family:var(--display);font-size:1.2rem;font-weight:600;letter-spacing:-.02em;color:var(--white);line-height:1.4}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:2em 0}
-.col-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
-.col-card.works{border-color:rgba(12,207,190,.2)}
-.col-card.fails{border-color:rgba(239,68,68,.15)}
-.col-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
-.col-card.works .col-label{color:var(--teal)}
-.col-card.fails .col-label{color:#F87171}
-.col-card ul{margin:0;padding:0;list-style:none}
-.col-card li{font-size:13.5px;color:var(--off);line-height:1.65;margin-bottom:8px;padding-left:16px;position:relative}
-.col-card li::before{content:'→';position:absolute;left:0;color:var(--dim);font-size:12px}
-.col-card.works li::before{color:var(--teal)}
-.col-card.fails li::before{content:'✕';color:#F87171}
 .callout{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:20px 24px;margin:2em 0}
 .callout p{margin-bottom:0;font-size:16px}
+.cta-box{background:linear-gradient(135deg,rgba(12,207,190,0.08),rgba(99,102,241,0.08));border:1px solid rgba(12,207,190,0.2);border-radius:12px;padding:32px;margin:2.5em 0;text-align:center}
+.cta-box p{margin-bottom:12px;font-size:17px;color:var(--white)}
+.cta-box a{display:inline-block;padding:12px 28px;background:var(--teal);color:var(--bg);font-family:var(--display);font-weight:700;font-size:15px;text-decoration:none;border-radius:8px;transition:all .2s;letter-spacing:-0.02em}
+.cta-box a:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(12,207,190,0.25)}
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5em 0 2em}
+.tech-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;text-align:center}
+.tech-item .tech-num{font-family:var(--display);font-size:1.6rem;font-weight:800;color:var(--teal);line-height:1}
+.tech-item .tech-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:4px}
 .back-link{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-bottom:60px;padding:10px 18px;border:1px solid rgba(12,207,190,.25);border-radius:100px;transition:all .2s}
 .back-link:hover{background:var(--teal-glow);color:var(--white)}
 .article-footer{max-width:680px;margin:0 auto;padding:0 48px 100px;border-top:1px solid var(--border);padding-top:60px}
@@ -84,7 +80,7 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
 .fl-links a:hover{color:var(--teal)}
 .sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
 .sr.visible{opacity:1;transform:translateY(0)}
-@media(max-width:768px){body{cursor:auto}#cursor,#cursor-ring{display:none}.nav-links{display:none}.article-hero,.article-body,.article-footer{padding-left:20px;padding-right:20px}.article-body img{padding:0 20px}.two-col{grid-template-columns:1fr}.next-posts{grid-template-columns:1fr}}
+@media(max-width:768px){body{cursor:auto}#cursor,#cursor-ring{display:none}.nav-links{display:none}.article-hero,.article-body,.article-footer{padding-left:20px;padding-right:20px}.next-posts{grid-template-columns:1fr}.tech-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -102,109 +98,110 @@ footer{padding:36px 48px;border-top:1px solid var(--border)}
 </nav>
 
 <div class="article-hero">
-  <div class="article-tag">AI Architecture · Production ML</div>
-  <h1 class="article-title">Build the Interface, Not the Model: The Architecture of a Model-Agnostic Agent</h1>
-  <div class="article-meta">Alexander Kwok &nbsp;·&nbsp; Mar 2026 &nbsp;·&nbsp; 7 min read</div>
+  <div class="article-tag">Data Visualisation &middot; AI Ecosystem</div>
+  <h1 class="article-title">I mapped the entire AI ecosystem into one interactive graph. Here's what it revealed.</h1>
+  <div class="article-meta">Alexander Kwok &nbsp;·&nbsp; Mar 2026 &nbsp;·&nbsp; 5 min read</div>
   <div class="article-divider"></div>
 </div>
 
-<div style="max-width:800px;margin:0 auto;padding:0 48px">
-  <img src="Build%20the%20Interface.png" alt="Build the Interface, Not the Model" style="width:100%;border-radius:12px;margin-bottom:60px;border:1px solid rgba(255,255,255,0.08)">
-</div>
-
 <article class="article-body">
-  <a href="writing.html" class="back-link">← All writing</a>
+  <a href="writing.html" class="back-link">&larr; All writing</a>
 
-  <p>Last week, I wrote about building an automated AI marketing system that handles social strategy, email drafts, and SEO rewrites for my wife's eCommerce business. The response was great, but the most common question I received from other engineers wasn't about the prompts — it was about the architecture.</p>
+  <p>There are over 80 major players shaping AI right now — models, companies, researchers, foundational concepts, seminal papers, and infrastructure. I wanted to see how they all connect. Not as a list. Not as a market map. As a <strong>graph</strong>.</p>
 
-  <p>Specifically: <strong>How do you build a high-volume automation system that doesn't go bankrupt on API costs?</strong></p>
+  <p>So I built one. An interactive knowledge graph of the AI landscape with 80+ nodes, 100+ edges, and 6 categories — all rendered as a force-directed network you can explore in your browser.</p>
 
-  <p>The trap most developers fall into right now is tight coupling. They build an AI tool by hardcoding calls directly to OpenAI or Anthropic. They lock their application's entire logic to one specific model's quirks. If that provider raises prices, deprecates an endpoint, or a competitor releases a significantly cheaper model, the application breaks or becomes a financial liability.</p>
+  <div class="cta-box">
+    <p><strong>Explore the interactive graph</strong></p>
+    <a href="ai-landscape.html">Launch the AI Landscape &rarr;</a>
+  </div>
 
-  <p>The solution is an abstraction layer. You must treat the LLM as an interchangeable compute unit, not the core product. The actual value of an AI system lies in the workflow and the interface.</p>
+  <p>What surprised me wasn't any individual node. It was the <strong>structure</strong>. When you lay out the entire ecosystem as a network, three patterns jump out that you can't see from reading the news.</p>
 
-  <p>Today, we are opening up the hood on OpenClaw — the architecture I built to solve this — to look at exactly how to decouple your interface from your LLM, and the specific routing logic used to slash API costs in production.</p>
+  <h2>1. Everything traces back to one paper</h2>
 
-  <p>To build a truly model-agnostic system over a single weekend, I broke the architecture down into three distinct layers: The Interface, The Orchestration, and The Router.</p>
+  <p>Click on "Transformer" in the graph and count the connections. GPT-4, Claude, Gemini, LLaMA, Mistral, DeepSeek — every single frontier model is architecturally downstream of one 2017 paper: <strong>"Attention Is All You Need"</strong> by Vaswani et al.</p>
+
+  <p>Eight researchers at Google Brain wrote a paper. Nine years later, it underpins a trillion-dollar industry. The Transformer node has more connections than any company or model in the graph. That's not a coincidence — it's a structural insight about where value actually originates in AI. It's not in products. It's in paradigms.</p>
+
+  <h2>2. The real moat is infrastructure, not models</h2>
+
+  <p>Here's what caught my eye: <strong>NVIDIA and CUDA are more central to the graph than any single model.</strong> The H100 GPU connects to GPT-4, Claude, and LLaMA. CUDA powers both PyTorch and TensorFlow. Every training run, every fine-tune, every inference call flows through this infrastructure layer.</p>
+
+  <p>Hugging Face tells a similar story. It hosts LLaMA, Stable Diffusion, Mistral, and thousands of fine-tunes. It's the connective tissue of open-source AI.</p>
+
+  <p>If you're thinking about where durable value lives in the AI stack — look at the nodes with the most edges, not the ones with the most hype. The picks-and-shovels thesis isn't just a cliché. It's visible in the topology of the graph.</p>
+
+  <h2>3. The open-source cluster is now as dense as the closed one</h2>
+
+  <p>Zoom out and you'll see two distinct clusters forming. One is the <strong>closed ecosystem</strong>: OpenAI → Microsoft → GPT-4 → Codex. The other is the <strong>open ecosystem</strong>: Meta AI → LLaMA → PyTorch → Hugging Face → Mistral → Stable Diffusion.</p>
+
+  <p>What's remarkable is how <strong>densely interconnected</strong> the open cluster has become. LLaMA spawned thousands of derivatives. Mistral's Mixture-of-Experts models are served through vLLM. Everything runs on PyTorch. The open graph isn't sparse anymore — it's a self-reinforcing network with its own gravity.</p>
+
+  <p>DeepSeek sits at the intersection: a Chinese lab that used open techniques (MoE, chain-of-thought) to match frontier performance at a fraction of the cost. In the graph, it connects to both clusters. That structural position tells you something about where AI competition is heading.</p>
 
   <hr>
 
-  <h2>Layer 1: The Interface (Telegram API)</h2>
+  <h2>How I built it</h2>
 
-  <p>The goal was zero user friction. When you are managing inventory and chasing a toddler, you do not have the cognitive bandwidth to log into a new SaaS dashboard or learn prompt engineering parameters.</p>
+  <p>The tech is simple. The data curation was the hard part.</p>
 
-  <p>The interface layer is completely decoupled from the AI. I used the Telegram Bot API.</p>
+  <div class="tech-grid">
+    <div class="tech-item"><div class="tech-num">80+</div><div class="tech-label">Nodes</div></div>
+    <div class="tech-item"><div class="tech-num">100+</div><div class="tech-label">Edges</div></div>
+    <div class="tech-item"><div class="tech-num">6</div><div class="tech-label">Categories</div></div>
+  </div>
 
-  <ul>
-    <li><strong>The UX:</strong> Chloe simply opens an app she already uses and sends a message (e.g., "Draft an email for the new summer line"). It feels exactly like texting a marketing intern.</li>
-    <li><strong>The Tech:</strong> Telegram hits a webhook on my server with the payload. The bot has absolutely zero awareness of what AI model will process the text. It only knows how to send strings and receive strings.</li>
-  </ul>
+  <p><strong>Stack:</strong> A single HTML file. D3.js for the force-directed layout. No build step, no framework, no backend. The entire graph — data, rendering, and interactions — lives in ~650 lines of vanilla JavaScript.</p>
 
-  <h2>Layer 2: The Orchestration Engine (Python)</h2>
+  <p><strong>Data model:</strong> Each node has an id, label, type (model/company/researcher/concept/paper/infrastructure), description, year, and an importance score (1-10) that controls its visual size. Edges carry a relationship label: "built-by", "evolved-into", "technique", "architecture", and so on.</p>
 
-  <p>Behind the webhook sits a lightweight Python orchestration layer.</p>
+  <p><strong>The real work</strong> was deciding what to include and how things connect. I curated every node and edge by hand — reading papers, tracing lineages, mapping which researchers moved between which labs. The graph is opinionated. That's the point. A knowledge graph isn't a database dump. It's an argument about what matters and how things relate.</p>
 
-  <p>Instead of writing this boilerplate from scratch, I used Claude Code as my primary development environment. By feeding Claude Code the specific constraints of the Telegram API and my desired folder structure, I treated it as a pair programmer with deep project context. It mapped the webhook listeners and data validation in hours.</p>
-
-  <p>This engine does three things:</p>
-
-  <ol>
-    <li>Parses the incoming Telegram webhook.</li>
-    <li>Extracts the intent (Content Strategy, SEO Rewrite, or Email Draft).</li>
-    <li>Fetches the necessary system context (brand voice guidelines, current inventory) and packages the final prompt array.</li>
-  </ol>
-
-  <h2>Layer 3: The Cost-Routing Logic (The Secret Sauce)</h2>
-
-  <p>This is where the model-agnostic design pays off. Token costs compound fast, and the golden rule of production AI is to route tasks to the cheapest model that meets the quality bar.</p>
-
-  <p>Instead of sending the packaged prompt straight to an API, the Orchestration Engine sends it to a custom Router class. The Router evaluates the intent and dynamically swaps the underlying model:</p>
-
-  <ul>
-    <li><strong>High-Volume / Low-Nuance</strong> (<code>route_to_qwen</code>): Tasks like taking 50 existing product listings and rewriting them for SEO discoverability require strict adherence to a JSON schema, but very little creative reasoning. The router points these at Qwen for a fraction of the cost.</li>
-    <li><strong>High-Nuance / Strategic</strong> (<code>route_to_claude</code>): Generating a weekly social media content strategy or drafting email campaign copy requires deep reasoning and strict adherence to a specific brand voice. The router sends these to Claude 3.5 Sonnet, absorbing the higher token cost because the strategic quality is non-negotiable.</li>
-  </ul>
+  <p><strong>Interactions:</strong> Click any node to highlight its neighbourhood. Search by name or concept. Filter by category. Navigate between connected nodes through the detail panel. Press <code>/</code> to search, <code>Esc</code> to reset.</p>
 
   <div class="callout">
-    <p><strong>The key insight:</strong> The model you choose is maybe 20% of the problem. The other 80% — the routing logic, the interface, the pipeline, the abstraction layer — is what separates the systems that ship from the systems that just demo well.</p>
+    <p><strong>Deployed on:</strong> Vercel (static site, auto-deploy on push). The page loads in under a second. No API calls, no loading spinners for data. Everything is client-side.</p>
   </div>
 
-  <h2>The Broader Lesson: Bridging the AI Gap</h2>
+  <hr>
 
-  <p>I have spent my career building AI systems at enterprise scale at AWS, WooliesX, and Linkby. When you are processing petabytes of data, you are obsessed with infrastructure.</p>
+  <h2>What's next</h2>
 
-  <p>But this weekend project was a stark reminder that the rule of scale applies to small businesses, too: <strong>Treat your infrastructure as seriously as your algorithm.</strong></p>
+  <p>This is v1. I'm planning to expand it with a timeline slider (watch the graph evolve from 2017 to 2025), pull in citation data from OpenAlex to weight edges by influence, and add a "shortest path" feature — click two nodes and see the chain of connections between them.</p>
 
-  <p>If you build the bridge correctly, you can deliver enterprise-grade output quality for the cost of pennies in API calls.</p>
+  <p>If you're building in AI, I'd encourage you to try mapping your own landscape. The act of deciding what connects to what forces a level of clarity about the ecosystem that reading articles never gives you.</p>
 
-  <blockquote>Are you currently hardcoding your AI pipelines to a single model provider, or have you built an abstraction layer? How are you handling model routing and API costs in production?</blockquote>
-
-  <p>Drop a comment on <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank" style="color:var(--teal)">LinkedIn</a> — I read every single one, and I'd love to hear how you are solving the cost-routing problem.</p>
+  <div class="cta-box">
+    <p><strong>See for yourself</strong></p>
+    <a href="ai-landscape.html">Explore the AI Landscape Graph &rarr;</a>
+  </div>
 </article>
 
-<div class="article-footer sr">
+<div class="article-footer">
   <div class="author-card">
-    <img src="Headshot%20zoom%20in%20wedding.jpeg" alt="Alexander Kwok" class="author-img">
+    <img src="Headshot%20zoom%20in%20wedding.jpeg" class="author-img" alt="Alexander Kwok">
     <div>
       <div class="author-name">Alexander Kwok</div>
-      <div class="author-bio">Head of DS & ML Engineering at Linkby · Ex-AWS L6 · WooliesX · Sydney</div>
+      <div class="author-bio">Head of Data Science & ML Engineering. Building production AI/ML systems. Sydney, Australia.</div>
     </div>
   </div>
+
   <div class="next-posts">
-    <a href="post-ml-platform.html" class="next-card">
-      <div class="next-label">← Previous</div>
-      <div class="next-title">Selecting an Effective & Productive Machine Learning Platform</div>
+    <a href="post-interface.html" class="next-card">
+      <div class="next-label">&larr; Previous</div>
+      <div class="next-title">Build the Interface, Not the Model</div>
     </a>
-    <a href="post-ai-landscape.html" class="next-card">
-      <div class="next-label">Next →</div>
-      <div class="next-title">I mapped the entire AI ecosystem into one interactive graph.</div>
-    </a>
+    <div class="next-card" style="background:var(--border);cursor:default;opacity:0.5">
+      <div class="next-label">Next &rarr;</div>
+      <div class="next-title" style="color:var(--dim)">Coming soon</div>
+    </div>
   </div>
 </div>
 
 <footer>
   <div class="footer-inner">
-    <div class="fl-left">© 2026 Alexander Kwok &nbsp;·&nbsp; Sydney, Australia</div>
+    <div class="fl-left">&copy; 2026 Alexander Kwok &nbsp;&middot;&nbsp; Sydney, Australia</div>
     <div class="fl-links">
       <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank">LinkedIn</a>
       <a href="writing.html">Writing</a>
