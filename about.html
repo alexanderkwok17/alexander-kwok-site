@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Alexander Kwok</title>
+<meta name="description" content="The career journey of Alexander Kwok — from AWS L6 Data Science Manager to Head of DS & ML Engineering. Building production AI/ML systems that actually ship.">
+<meta property="og:title" content="About — Alexander Kwok">
+<meta property="og:description" content="From AWS L6 to building production AI/ML systems. The career journey behind 'Engineering the other 80%'.">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://alexander-kwok.com/about.html">
+<meta property="og:image" content="https://alexander-kwok.com/Headshot%20zoom%20in%20wedding.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://alexander-kwok.com/about.html">
+<meta name="google-site-verification" content="b7NnzIw1iktlITPsSiP72LiZKaR8k2HEwJx7awh4z9k" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "Alexander Kwok",
+    "url": "https://alexander-kwok.com",
+    "jobTitle": "Head of Data Science & ML Engineering",
+    "worksFor": {"@type": "Organization", "name": "Linkby"},
+    "alumniOf": [
+      {"@type": "Organization", "name": "Amazon Web Services"},
+      {"@type": "Organization", "name": "WooliesX (Woolworths Group)"}
+    ],
+    "knowsAbout": ["Machine Learning", "AI Systems", "Data Engineering", "MLOps", "Production ML"],
+    "sameAs": ["https://www.linkedin.com/in/alexander-k-ds/"],
+    "image": "https://alexander-kwok.com/Headshot%20zoom%20in%20wedding.jpeg"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#050507;--bg2:#08080C;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --teal:#0CCFBE;--teal2:#0D9488;--teal-glow:rgba(12,207,190,0.1);
+  --white:#FAFCFF;--off:#8B9AB5;--dim:#3D4F63;
+  --display:'Bricolage Grotesque',sans-serif;--sans:'Instrument Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+
+/* CURSOR */
+#cursor{position:fixed;width:8px;height:8px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:screen}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(12,207,190,0.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94),opacity .3s}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:16px;height:16px}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{width:60px;height:60px;opacity:.4}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,7,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-pip{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--off);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--teal)}
+.nav-btn{background:transparent!important;color:var(--teal)!important;border:1px solid rgba(12,207,190,.35)!important;padding:8px 18px!important;border-radius:100px!important;transition:all .22s!important;font-family:var(--mono)!important;font-size:10.5px!important;letter-spacing:.08em!important}
+.nav-btn:hover{background:var(--teal-glow)!important;color:var(--white)!important}
+
+/* HERO */
+.about-hero{min-height:70vh;display:flex;align-items:center;padding:140px 48px 80px;position:relative;overflow:hidden}
+.about-hero-bg{position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 70% 50% at 30% 0%,rgba(12,207,190,.06) 0%,transparent 60%),
+             radial-gradient(ellipse 40% 40% at 80% 80%,rgba(13,148,136,.03) 0%,transparent 60%)}
+.about-hero-grid{position:absolute;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at center,black 30%,transparent 70%)}
+.about-hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;width:100%;display:grid;grid-template-columns:1fr 300px;gap:80px;align-items:center}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:28px;display:flex;align-items:center;gap:12px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .1s}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.about-title{font-family:var(--display);font-size:clamp(2.8rem,6vw,5rem);font-weight:800;letter-spacing:-.04em;line-height:1.0;color:var(--white);margin-bottom:24px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .2s}
+.about-subtitle{font-size:18px;color:var(--off);line-height:1.75;max-width:560px;opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .4s}
+.about-subtitle strong{color:var(--white);font-weight:600}
+.about-photo{width:280px;height:280px;border-radius:20px;overflow:hidden;border:2px solid var(--border);opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards .5s;position:relative}
+.about-photo img{width:100%;height:100%;object-fit:cover}
+.about-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(12,207,190,.08),transparent);pointer-events:none}
+
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* COMPANY LOGOS */
+.logos-section{border-top:1px solid var(--border);padding:64px 48px}
+.logos-inner{max-width:1100px;margin:0 auto;text-align:center}
+.logos-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:40px}
+.logos-row{display:flex;justify-content:center;align-items:center;gap:72px;flex-wrap:wrap}
+.logo-item{display:flex;flex-direction:column;align-items:center;gap:12px;opacity:.5;transition:opacity .3s}
+.logo-item:hover{opacity:1}
+.logo-icon{width:64px;height:64px;border-radius:16px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:28px}
+.logo-name{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--off)}
+.logo-role{font-size:12px;color:var(--dim);margin-top:2px}
+
+/* TIMELINE */
+.timeline-section{padding:120px 48px;border-top:1px solid var(--border)}
+.timeline-inner{max-width:1100px;margin:0 auto}
+.sec-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';width:20px;height:1px;background:var(--teal)}
+.sec-title{font-family:var(--display);font-size:clamp(2.2rem,4.5vw,4rem);font-weight:800;letter-spacing:-.04em;color:var(--white);line-height:1.0;margin-bottom:16px}
+.sec-sub{font-size:17px;color:var(--off);font-weight:400;margin-bottom:80px;max-width:520px;line-height:1.7}
+
+.timeline{position:relative;padding-left:48px}
+.timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--teal),var(--border) 30%,var(--border) 70%,transparent)}
+
+.tl-item{position:relative;margin-bottom:64px;opacity:0;transform:translateY(20px)}
+.tl-item.visible{opacity:1;transform:translateY(0);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.tl-dot{position:absolute;left:-41px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--teal);z-index:2}
+.tl-item.current .tl-dot{background:var(--teal);box-shadow:0 0 16px rgba(12,207,190,.5)}
+.tl-year{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.tl-company{font-family:var(--display);font-size:1.6rem;font-weight:700;letter-spacing:-.025em;color:var(--white);margin-bottom:4px;line-height:1.2}
+.tl-role{font-size:15px;color:var(--off);margin-bottom:16px;font-style:italic}
+.tl-body{font-size:15px;color:var(--off);line-height:1.75;max-width:640px;margin-bottom:20px}
+.tl-metrics{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:16px}
+.tl-metric{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;min-width:140px}
+.tl-metric-n{font-family:var(--display);font-size:1.4rem;font-weight:800;letter-spacing:-.03em;color:var(--teal);display:block;margin-bottom:2px}
+.tl-metric-l{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.tl-pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:4px 10px;border-radius:100px;background:rgba(12,207,190,.06);border:1px solid rgba(12,207,190,.18);color:var(--teal)}
+
+/* KEY METRICS */
+.metrics-section{padding:100px 48px;border-top:1px solid var(--border)}
+.metrics-inner{max-width:1100px;margin:0 auto}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:64px}
+.m-card{background:var(--bg2);padding:40px 28px;text-align:center;transition:background .3s;position:relative;overflow:hidden}
+.m-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--teal-glow),transparent);opacity:0;transition:opacity .3s}
+.m-card:hover{background:rgba(10,10,16,1)}
+.m-card:hover::after{opacity:1}
+.m-card:hover .m-num{transform:scale(1.05)}
+.m-num{font-family:var(--display);font-size:clamp(2rem,3vw,3rem);font-weight:800;letter-spacing:-.04em;color:var(--teal);margin-bottom:8px;position:relative;z-index:1;transition:transform .3s}
+.m-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);position:relative;z-index:1;line-height:1.5}
+.m-desc{font-size:13px;color:var(--off);margin-top:8px;position:relative;z-index:1;line-height:1.5}
+
+/* TECH STACK */
+.stack-section{padding:120px 48px;border-top:1px solid var(--border)}
+.stack-inner{max-width:1100px;margin:0 auto}
+.stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-top:64px}
+.stack-category{min-width:0}
+.stack-cat-title{font-family:var(--display);font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--white);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.stack-items{display:flex;flex-direction:column;gap:12px}
+.stack-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:var(--surface);border:1px solid transparent;transition:border-color .2s,background .2s}
+.stack-item:hover{border-color:rgba(12,207,190,.2);background:rgba(12,207,190,.04)}
+.stack-icon{width:32px;height:32px;border-radius:8px;background:rgba(12,207,190,.08);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.stack-name{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--white)}
+.stack-detail{font-size:12px;color:var(--dim);margin-top:1px}
+
+/* CTA */
+.cta-section{padding:120px 48px;border-top:1px solid var(--border);text-align:center}
+.cta-inner{max-width:700px;margin:0 auto}
+.cta-title{font-family:var(--display);font-size:clamp(2rem,4vw,3.2rem);font-weight:800;letter-spacing:-.04em;color:var(--white);margin-bottom:16px;line-height:1.05}
+.cta-desc{font-size:17px;color:var(--off);line-height:1.7;margin-bottom:40px}
+.cta-buttons{display:flex;justify-content:center;gap:14px}
+.btn-p{font-family:var(--sans);font-size:14px;font-weight:600;background:var(--teal);color:#000;padding:14px 30px;border-radius:100px;text-decoration:none;transition:all .22s;letter-spacing:-.01em}
+.btn-p:hover{background:#5EEAD4;transform:translateY(-2px);box-shadow:0 12px 32px rgba(12,207,190,.35)}
+.btn-g{font-family:var(--sans);font-size:14px;font-weight:500;background:var(--surface);color:var(--off);padding:14px 30px;border-radius:100px;border:1px solid var(--border);text-decoration:none;transition:all .22s}
+.btn-g:hover{border-color:rgba(12,207,190,.3);color:var(--white)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;justify-content:space-between;align-items:center}
+.foot-copy{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim)}
+.foot-links{display:flex;gap:24px}
+.foot-links a{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim);text-decoration:none;transition:color .2s}
+.foot-links a:hover{color:var(--teal)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links{display:none}
+  .about-hero{padding:120px 24px 60px}
+  .about-hero-inner{grid-template-columns:1fr;gap:40px}
+  .about-photo{width:200px;height:200px;order:-1}
+  .logos-section,.timeline-section,.metrics-section,.stack-section,.cta-section{padding-left:24px;padding-right:24px}
+  .logos-row{gap:40px}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .stack-grid{grid-template-columns:1fr}
+  .tl-metrics{flex-direction:column}
+  .cta-buttons{flex-direction:column;align-items:center}
+  footer{flex-direction:column;gap:16px;padding:40px 24px}
+}
+@media(max-width:600px){
+  .metrics-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-pip"></span>Alexander Kwok</a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Work</a></li>
+    <li><a href="index.html#principles">Principles</a></li>
+    <li><a href="index.html#writing">Writing</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="ai-landscape.html">AI Landscape</a></li>
+    <li><a href="mailto:alex@medi-apps.ai" class="nav-btn">Get in touch</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="about-hero-bg"></div>
+  <div class="about-hero-grid"></div>
+  <div class="about-hero-inner">
+    <div>
+      <div class="hero-eyebrow">About</div>
+      <h1 class="about-title">A decade of shipping AI that works.</h1>
+      <p class="about-subtitle">Alexander Kwok is a <strong>Head of Data Science & ML Engineering</strong> based in Sydney, Australia. Over the past decade, he has built and led teams that ship production AI/ML systems — from petabyte-scale data platforms at AWS to personalised recommendation engines serving millions of customers at Woolworths, to building an entire data organisation from scratch at Linkby.</p>
+    </div>
+    <div class="about-photo">
+      <img src="Headshot zoom in wedding.jpeg" alt="Alexander Kwok" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- COMPANY LOGOS -->
+<section class="logos-section">
+  <div class="logos-inner">
+    <div class="logos-label">Where I have built</div>
+    <div class="logos-row">
+      <div class="logo-item">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 6L8 10v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12v-6l-8-4z" stroke="#FF9900" stroke-width="1.5" fill="none"/><path d="M11 16l3 3 7-7" stroke="#FF9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="logo-name">Amazon Web Services</div>
+        <div class="logo-role">L6 Data Science Manager</div>
+      </div>
+      <div class="logo-item">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="#1B8C1B" stroke-width="1.5" fill="none"/><path d="M10 16h12M16 10v12" stroke="#1B8C1B" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="logo-name">WooliesX</div>
+        <div class="logo-role">Lead Data Scientist</div>
+      </div>
+      <div class="logo-item">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="8" y="10" width="16" height="12" rx="2" stroke="#0CCFBE" stroke-width="1.5" fill="none"/><path d="M8 14h16" stroke="#0CCFBE" stroke-width="1.5"/><circle cx="12" cy="18" r="1.5" fill="#0CCFBE"/></svg>
+        </div>
+        <div class="logo-name">Linkby</div>
+        <div class="logo-role">Head of DS & ML Engineering</div>
+      </div>
+      <div class="logo-item">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 8l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6l2-6z" stroke="#8B9AB5" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="logo-name">Consulting</div>
+        <div class="logo-role">AI & ML Advisory</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREER TIMELINE -->
+<section class="timeline-section">
+  <div class="timeline-inner">
+    <div class="sec-label">Career Journey</div>
+    <h2 class="sec-title">Built across scale.</h2>
+    <p class="sec-sub">From enterprise ML at AWS to startup velocity at Linkby — each chapter shaped a different dimension of how to ship AI that works in production.</p>
+
+    <div class="timeline">
+
+      <div class="tl-item current">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2025 — Present</div>
+        <div class="tl-company">Linkby</div>
+        <div class="tl-role">Head of Data Science & ML Engineering</div>
+        <p class="tl-body">Joined with a blank slate and a mandate to build Linkby's entire data capability from zero. Hired an ML Engineer and a Data Scientist — a deliberate one-pizza team. In nine months, shipped a Databricks platform, migrated analytics to ClickHouse, built AI-agent-driven Dagster pipelines, and deployed a personalised click pricing model live in production.</p>
+        <div class="tl-metrics">
+          <div class="tl-metric"><span class="tl-metric-n">3</span><span class="tl-metric-l">Person team</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">10x</span><span class="tl-metric-l">Velocity vs conventional</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">9 mo</span><span class="tl-metric-l">Zero to production</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">30%</span><span class="tl-metric-l">CTR uplift</span></div>
+        </div>
+        <div class="tl-pills">
+          <span class="pill">Databricks</span><span class="pill">ClickHouse</span><span class="pill">Dagster</span><span class="pill">LightGBM</span><span class="pill">AI Agents</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2022 — 2025</div>
+        <div class="tl-company">Amazon Web Services</div>
+        <div class="tl-role">L6 Data Science Manager — Network Availability</div>
+        <p class="tl-body">Led a team of 10 building data-centric network availability strategies at petabyte scale. Implemented LLM Ops automation that eliminated over 100 manual engineering processes, driving a 10x productivity gain across the organisation. Contributed to a patent for a novel ML algorithm for complex network applications.</p>
+        <div class="tl-metrics">
+          <div class="tl-metric"><span class="tl-metric-n">10+</span><span class="tl-metric-l">Engineers managed</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">10 PB+</span><span class="tl-metric-l">Daily data processed</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">100+</span><span class="tl-metric-l">Processes automated</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">1</span><span class="tl-metric-l">Patent contribution</span></div>
+        </div>
+        <div class="tl-pills">
+          <span class="pill">LLM Ops</span><span class="pill">SageMaker</span><span class="pill">EMR</span><span class="pill">Spark</span><span class="pill">10 PB+ daily</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2018 — 2022</div>
+        <div class="tl-company">WooliesX (Woolworths Group)</div>
+        <div class="tl-role">Lead Data Scientist — Personalisation</div>
+        <p class="tl-body">Led a team of 21 delivering personalised recommendation engines across Web, App, and Email for millions of Woolworths customers. Built graph neural network and ALS-based recommendation systems with real-time feature engineering at national retail scale. This was the chapter that taught the difference between a model that works in a notebook and a model that works at 3am on a Saturday when nobody is watching.</p>
+        <div class="tl-metrics">
+          <div class="tl-metric"><span class="tl-metric-n">21</span><span class="tl-metric-l">Team members</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">M+</span><span class="tl-metric-l">Customers served</span></div>
+          <div class="tl-metric"><span class="tl-metric-n">3</span><span class="tl-metric-l">Channels — Web, App, Email</span></div>
+        </div>
+        <div class="tl-pills">
+          <span class="pill">GNN</span><span class="pill">ALS</span><span class="pill">Real-time serving</span><span class="pill">GCP</span><span class="pill">Kubernetes</span><span class="pill">BigQuery</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2024 — Present</div>
+        <div class="tl-company">AI & ML Consulting</div>
+        <div class="tl-role">Independent Technical Advisor</div>
+        <p class="tl-body">Parallel to full-time roles, Alexander advises startups and enterprises on production AI strategy. Recent engagements include a LangChain sales automation platform with network analysis and Slack RAG, and a clinical transcription system for Indonesian hospitals using fine-tuned Whisper for Bahasa Indonesia medical audio.</p>
+        <div class="tl-pills">
+          <span class="pill">LangChain</span><span class="pill">RAG</span><span class="pill">Whisper fine-tuning</span><span class="pill">Clinical AI</span><span class="pill">Network Analysis</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- KEY METRICS -->
+<section class="metrics-section">
+  <div class="metrics-inner">
+    <div class="sec-label">By the numbers</div>
+    <h2 class="sec-title">Career at a glance.</h2>
+    <div class="metrics-grid">
+      <div class="m-card">
+        <div class="m-num">10+</div>
+        <div class="m-label">Years in production ML</div>
+        <div class="m-desc">Enterprise to startup, always shipping</div>
+      </div>
+      <div class="m-card">
+        <div class="m-num">21</div>
+        <div class="m-label">Largest team led</div>
+        <div class="m-desc">Data scientists & engineers at WooliesX</div>
+      </div>
+      <div class="m-card">
+        <div class="m-num">10 PB+</div>
+        <div class="m-label">Daily data processed</div>
+        <div class="m-desc">Network availability systems at AWS</div>
+      </div>
+      <div class="m-card">
+        <div class="m-num">10x</div>
+        <div class="m-label">Productivity multiplier</div>
+        <div class="m-desc">LLM Ops automation at AWS</div>
+      </div>
+      <div class="m-card">
+        <div class="m-num">30%</div>
+        <div class="m-label">CTR uplift</div>
+        <div class="m-desc">Personalised pricing model at Linkby</div>
+      </div>
+      <div class="m-card">
+        <div class="m-num">1</div>
+        <div class="m-label">Patent</div>
+        <div class="m-desc">Novel ML algorithm for network applications</div>
+      </div>
+      <div class="m-card">
+        <div class="m-num">M+</div>
+        <div class="m-label">Customers served</div>
+        <div class="m-desc">Woolworths recommendation engines</div>
+      </div>
+      <div class="m-card">
+        <div class="m-num">9 mo</div>
+        <div class="m-label">Zero to production</div>
+        <div class="m-desc">Full data platform built at Linkby</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="stack-section">
+  <div class="stack-inner">
+    <div class="sec-label">Tech Stack</div>
+    <h2 class="sec-title">Tools of the trade.</h2>
+    <p class="sec-sub">The technologies Alexander reaches for when building production AI/ML systems. Opinions included.</p>
+
+    <div class="stack-grid">
+      <div class="stack-category">
+        <div class="stack-cat-title">ML & AI</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-icon">🧠</div><div><div class="stack-name">Python</div><div class="stack-detail">Primary language, always</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🔥</div><div><div class="stack-name">PyTorch / TensorFlow</div><div class="stack-detail">Model training & experimentation</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🌲</div><div><div class="stack-name">LightGBM / XGBoost</div><div class="stack-detail">When gradient boosting is the right call</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🤖</div><div><div class="stack-name">LangChain / Claude / OpenAI</div><div class="stack-detail">LLM orchestration & agents</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🎙️</div><div><div class="stack-name">Whisper</div><div class="stack-detail">Speech-to-text, fine-tuned</div></div></div>
+        </div>
+      </div>
+
+      <div class="stack-category">
+        <div class="stack-cat-title">Data & Infrastructure</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-icon">🧱</div><div><div class="stack-name">Databricks</div><div class="stack-detail">Lakehouse platform of choice</div></div></div>
+          <div class="stack-item"><div class="stack-icon">⚡</div><div><div class="stack-name">ClickHouse</div><div class="stack-detail">Certified — real-time analytics</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🔧</div><div><div class="stack-name">Dagster</div><div class="stack-detail">Orchestration with AI agents</div></div></div>
+          <div class="stack-item"><div class="stack-icon">☁️</div><div><div class="stack-name">AWS / GCP</div><div class="stack-detail">SageMaker, EMR, BigQuery, K8s</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🚀</div><div><div class="stack-name">Spark</div><div class="stack-detail">Petabyte-scale processing</div></div></div>
+        </div>
+      </div>
+
+      <div class="stack-category">
+        <div class="stack-cat-title">MLOps & Deployment</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-icon">📦</div><div><div class="stack-name">Docker / Kubernetes</div><div class="stack-detail">Containerised model serving</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🔄</div><div><div class="stack-name">CI/CD Pipelines</div><div class="stack-detail">GitHub Actions, automated testing</div></div></div>
+          <div class="stack-item"><div class="stack-icon">📊</div><div><div class="stack-name">MLflow / Weights & Biases</div><div class="stack-detail">Experiment tracking & model registry</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🛡️</div><div><div class="stack-name">Model Monitoring</div><div class="stack-detail">Drift detection, alerting, observability</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🏗️</div><div><div class="stack-name">Terraform / IaC</div><div class="stack-detail">Infrastructure as code</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-title">Let's build something<br>that ships.</h2>
+    <p class="cta-desc">Whether you are hiring for a technical leadership role, need an AI/ML advisor, or just want to talk about production systems — I am always open to a conversation.</p>
+    <div class="cta-buttons">
+      <a href="mailto:alex@medi-apps.ai" class="btn-p">Get in touch</a>
+      <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank" rel="noopener" class="btn-g">Connect on LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="foot-copy">&copy; 2026 Alexander Kwok. Sydney, Australia.</span>
+  <div class="foot-links">
+    <a href="https://www.linkedin.com/in/alexander-k-ds/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:alex@medi-apps.ai">Email</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+// Custom cursor
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+(function loop(){cx+=(mx-cx)*.12;cy+=(my-cy)*.12;ring.style.left=cx+'px';ring.style.top=cy+'px';requestAnimationFrame(loop)})();
+
+// Scroll reveal for timeline items
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})
+},{threshold:0.15});
+document.querySelectorAll('.tl-item').forEach(el=>observer.observe(el));
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>
