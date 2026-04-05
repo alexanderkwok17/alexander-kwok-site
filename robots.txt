@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alexander-kwok.com/sitemap.xml
+
+# Block utility pages
+Disallow: /recording-cards.html
+Disallow: /video/
+Disallow: /linkedin-content/
