@@ -1,0 +1,31 @@
+Only 12% of AI agent projects make it to production.
+
+That stat came from Google Cloud's "Agent Advantage" event in Sydney — and the rest of the session explained why.
+
+3 hours of demos, architecture deep dives, and real case studies. Here are the 4 things that stuck with me 👇
+
+1️⃣ 𝗧𝗵𝗲 𝟭𝟮% 𝗽𝗿𝗼𝗱𝘂𝗰𝘁𝗶𝗼𝗻 𝗴𝗮𝗽 𝗶𝘀 𝗮 𝗽𝗲𝗼𝗽𝗹𝗲 𝗽𝗿𝗼𝗯𝗹𝗲𝗺, 𝗻𝗼𝘁 𝗮 𝘁𝗲𝗰𝗵 𝗽𝗿𝗼𝗯𝗹𝗲𝗺.
+
+We're all building POCs and demos — but the gap between "impressive demo" and "production system that delivers business value" is enormous. The teams that close it aren't the most technical. They're the ones where business and engineering speak the same language about what agents can and can't do.
+
+2️⃣ 𝗠𝗖𝗣 𝗶𝘀 𝘁𝗵𝗲 "𝗨𝗦𝗕-𝗖 𝗼𝗳 𝗮𝗴𝗲𝗻𝘁𝘀."
+
+Love this analogy. Model Context Protocol is becoming the universal standard for how agents connect to data and tools. Instead of writing custom integrations for every system, you write to one protocol. The industry — including Google — has actually aligned on a single standard. That almost never happens.
+
+3️⃣ 𝗔𝗴𝗲𝗻𝘁 𝗮𝗿𝗰𝗵𝗶𝘁𝗲𝗰𝘁𝘂𝗿𝗲 𝗶𝘀 𝘀𝗽𝗹𝗶𝘁𝘁𝗶𝗻𝗴 𝗶𝗻𝘁𝗼 𝟯 𝗰𝗹𝗲𝗮𝗿 𝗽𝗮𝘁𝘁𝗲𝗿𝗻𝘀:
+
+→ Function calling (model + tools, simplest)
+→ Agent-to-data via MCP (agent connects to databases, APIs, enterprise systems)
+→ Agent-to-agent orchestration (mesh of specialised agents on complex tasks)
+
+Most teams are on pattern 1. Production teams are moving to 2. The industry is heading to 3. I dug into this in my DeerFlow breakdown earlier this week — the framework space is already splitting along these lines.
+
+4️⃣ 𝗧𝗵𝗲 "𝘀𝗰𝗮𝗹𝗲 𝗽𝗮𝗿𝗮𝗱𝗼𝘅" 𝗶𝘀 𝗿𝗲𝗮𝗹.
+
+2025 was the adoption year. 2026 is supposed to be exponential growth. But scaling agents is fundamentally different from scaling traditional software. You need sandboxed execution, memory management, evaluation frameworks, and governance — all still being figured out.
+
+The best demo of the day: a voice agent handling multilingual car sales, switching between English and Spanish mid-conversation, using the camera to identify a car colour, and filtering inventory from it. All on Gemini with MCP integrations. The kind of thing that makes you rethink what "production agent" means.
+
+📎 Full writeup on my site — link in comments.
+
+#AI #AgentFramework #GoogleCloud #MCP #SoftwareArchitecture #MLOps

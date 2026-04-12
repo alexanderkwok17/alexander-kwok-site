@@ -1,0 +1,32 @@
+Stop A/B testing your models in production. There's a safer way.
+
+Run every candidate model in shadow mode first 👇
+
+[📸 Attach: post-monday-w2-code.png]
+
+The pattern in the image:
+→ Production model serves every request as normal
+→ Candidate model runs async in parallel on the same traffic
+→ Both predictions are logged for comparison
+→ Users always get the current model's output — zero risk
+
+The async part matters — you don't want the candidate model's latency to affect production response times.
+
+Log both outputs to your experiment tracker and diff them. You'll catch things offline evaluation never will:
+
+1️⃣ Latency spikes on edge-case inputs
+2️⃣ Prediction distribution shifts (candidate too aggressive/conservative)
+3️⃣ Error patterns on data the test set didn't cover
+4️⃣ Memory and CPU behaviour under real concurrency
+
+I've killed two model releases in shadow mode that looked great in offline evaluation.
+
+One had P99 latency 3x worse than production — would've blown our SLA on day one.
+
+The other had a subtle feature engineering bug that only triggered on weekend traffic. Weekday patterns looked identical. Weekend volume shifted the input distribution just enough to expose a dtype mismatch in one preprocessing step. We would've shipped it on a Monday and not known until Saturday.
+
+⚠️ One caveat: shadow mode doubles your compute cost on that endpoint. Size your infrastructure for it before you flip the switch. For most teams, running it on 10–20% of traffic is enough to get signal without blowing your budget.
+
+𝗦𝗵𝗶𝗽 𝘀𝗵𝗮𝗱𝗼𝘄 𝗺𝗼𝗱𝗲 𝗯𝗲𝗳𝗼𝗿𝗲 𝘆𝗼𝘂 𝘀𝗵𝗶𝗽 𝘁𝗵𝗲 𝗺𝗼𝗱𝗲𝗹.
+
+#MLOps #MachineLearning #ProductionML #SoftwareEngineering #Python

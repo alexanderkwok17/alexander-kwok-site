@@ -1,0 +1,35 @@
+ByteDance just open-sourced a multi-agent framework where a SuperAgent decomposes tasks into specialised sub-agents — each with their own tools, memory, and sandboxed execution.
+
+It's called 𝗗𝗲𝗲𝗿𝗙𝗹𝗼𝘄. One of the fastest-growing agent repos on GitHub right now.
+
+Here's why the architecture matters 👇
+
+🏗️ Most agent frameworks use a single-agent loop — one LLM calling tools sequentially.
+
+DeerFlow splits the work. A SuperAgent breaks tasks into specialised sub-agents — Search, Writer, Coder — each with tuned system prompts and independent tool sets. The Coder runs in a Docker/K8s sandbox, isolating execution by default.
+
+[📸 Attach: post-deerflow-infographic.png]
+
+🔄 I tested DeerFlow alongside Claude Code, CrewAI, and AutoGen. The differences are architectural, not just feature-level. Full comparison matrix in the image.
+
+⚡ 3 things that stand out:
+
+1️⃣ 𝗚𝗮𝘁𝗲𝘄𝗮𝘆 𝗠𝗼𝗱𝗲 — DeerFlow exposes agents as API endpoints. You can integrate it into existing backend services, not just use it as a CLI tool. This is what makes it production-viable, not just a research toy.
+
+2️⃣ 𝗦𝘂𝗯-𝗮𝗴𝗲𝗻𝘁 𝘀𝗽𝗲𝗰𝗶𝗮𝗹𝗶𝘇𝗮𝘁𝗶𝗼𝗻 — The research agent, coding agent, and writing agent each have tuned prompts and tool sets. Not one generic agent doing everything. The coordination overhead pays for itself on complex, multi-step tasks.
+
+3️⃣ 𝗠𝘂𝗹𝘁𝗶-𝗟𝗟𝗠 𝗿𝗼𝘂𝘁𝗶𝗻𝗴 — Swap between GPT, Claude, Gemini, or open-source models per sub-agent. No vendor lock-in at the framework level. Your research agent can run on a cheap model while your coding agent uses something stronger.
+
+🎯 When to use what:
+
+→ Building a dev workflow with Claude? 𝗖𝗹𝗮𝘂𝗱𝗲 𝗖𝗼𝗱𝗲
+→ Multi-agent pipelines with role specialization? 𝗗𝗲𝗲𝗿𝗙𝗹𝗼𝘄 / 𝗖𝗿𝗲𝘄𝗔𝗜
+→ Quick prototyping with conversational agents? 𝗔𝘂𝘁𝗼𝗚𝗲𝗻
+
+The agent framework space is splitting into clear categories. DeerFlow is betting that the future is multi-agent coordination, not single-agent power.
+
+Whether that bet pays off depends on whether the coordination overhead is worth the specialization gains. In my testing — for complex, multi-step research and code generation tasks — it is.
+
+📎 Architecture diagram + comparison matrix in the image.
+
+#AI #AgentFramework #DeerFlow #LLM #SoftwareArchitecture
